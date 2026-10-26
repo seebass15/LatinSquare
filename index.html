@@ -1,0 +1,574 @@
+<!-- V1 THIS ONLY GOES WITH latinSquare.JS AND HAD SOME BUGS DUE TO UI IMPLEMENTATION-->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latin Square Puzzle Game</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary-color: #4a90e2;
+            --primary-hover: #357abd;
+            --cell-bg: #eef2f7;
+            --cell-filled: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #cbd5e1;
+            --accent-color: #2ec4b6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .game-container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: var(--text-color);
+        }
+
+        /* GRID STYLING */
+        .grid-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            aspect-ratio: 1;
+            margin-bottom: 30px;
+        }
+
+        .cell {
+            background-color: var(--cell-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .cell:hover {
+            border-color: var(--primary-color);
+            background-color: #e2e8f0;
+        }
+
+        .cell.filled {
+            background-color: var(--cell-filled);
+            cursor: default;
+        }
+
+        .cell.target-highlight {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+        }
+
+        /* CANDIDATE TRAY STYLING */
+        .tray-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .candidates-tray {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .candidate-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            background-color: #ffffff;
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .candidate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-btn.selected {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(74, 144, 226, 0.4);
+        }
+
+        .candidate-btn.empty-slot {
+            border-color: #e2e8f0;
+            background-color: #f8fafc;
+            color: #cbd5e1;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* STATUS MESSAGE */
+        .status-message {
+            height: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            color: #ef4444;
+        }
+
+        .status-message.success {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Latin Square</h1>
+
+        <div id="gridBoard" class="grid-board"></div>
+
+        <div class="tray-label">Available Numbers</div>
+        <div id="candidatesTray" class="candidates-tray"></div>
+
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+    <script src="latinSquare.js"></script>
+    <script>
+        // GAME STATE
+        /*let matrix = [
+            [0, 2, 0],
+            [2, 1, 3],
+            [1, 3, 0]
+        ];
+
+        let availNums = [];*/
+        let selectedCandidateIndex = null;
+
+        // INITIALIZATION
+        function initGame() {
+            availNums = newAvailNums();
+            renderGrid();
+            renderCandidates();
+            setStatus("Select an available number below, then pick a cell.");
+        }
+
+        // DOM RENDERERS
+        function renderGrid() {
+            const gridContainer = document.getElementById('gridBoard');
+            gridContainer.innerHTML = '';
+
+            for (let r = 0; r < matrix.length; r++) {
+                for (let c = 0; c < matrix[r].length; c++) {
+                    const cellVal = matrix[r][c];
+                    const cellEl = document.createElement('div');
+                    cellEl.className = `cell ${cellVal !== 0 ? 'filled' : ''}`;
+                    
+                    // Display blank for 0, otherwise show value
+                    cellEl.textContent = cellVal === 0 ? '' : cellVal;
+                    
+                    // Add click action for playable cells
+                    if (cellVal === 0) {
+                        cellEl.addEventListener('click', () => handleCellClick(r, c));
+                    }
+
+                    gridContainer.appendChild(cellEl);
+                }
+            }
+        }
+
+        function renderCandidates() {
+            const trayContainer = document.getElementById('candidatesTray');
+            trayContainer.innerHTML = '';
+
+            availNums.forEach((num, index) => {
+                const btn = document.createElement('button');
+                
+                if (num === null || num === undefined) {
+                    btn.className = 'candidate-btn empty-slot';
+                    btn.textContent = '-';
+                    btn.disabled = true;
+                } else {
+                    btn.className = `candidate-btn ${selectedCandidateIndex === index ? 'selected' : ''}`;
+                    btn.textContent = num;
+                    btn.addEventListener('click', () => handleCandidateSelect(index));
+                }
+
+                trayContainer.appendChild(btn);
+            });
+        }
+
+        // EVENT HANDLERS
+        function handleCandidateSelect(index) {
+            if (availNums[index] === null) return;
+            selectedCandidateIndex = index;
+            renderCandidates();
+            setStatus(`Selected number ${availNums[index]}. Now tap an empty cell.`, true);
+        }
+
+        function handleCellClick(r, c) {
+            if (selectedCandidateIndex === null) {
+                setStatus("Please select a candidate number first!");
+                return;
+            }
+
+            const chosenNum = availNums[selectedCandidateIndex];
+            const inputChoice = [chosenNum, r, c];
+
+            // Execute move using your Engine logic
+            const moveSuccess = UserInput(inputChoice, availNums);
+
+            if (moveSuccess) {
+                selectedCandidateIndex = null;
+                renderGrid();
+                renderCandidates();
+            }
+        }
+
+        function setStatus(msg, isSuccess = false) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = msg;
+            statusEl.className = `status-message ${isSuccess ? 'success' : ''}`;
+        }
+
+        // GAME ENGINE LOGIC INTEGRATION
+        /*function UserInput(inputChoice, availNum) {
+            let myInput = Number(inputChoice[0]);
+            let xPos = Number(inputChoice[1]); // row
+            let yPos = Number(inputChoice[2]); // col
+            let cellCord = xPos + '-' + yPos;
+
+            if (availNum.includes(myInput)) {
+                let legalMovesMap1 = get_legal_moves(matrix);
+                let numCheck = legalMovesMap1.get(cellCord);
+
+                if (numCheck && numCheck.includes(myInput)) {
+                    // Place the move
+                    matrix[xPos][yPos] = myInput;
+
+                    // Remove from available candidates using splice
+                    let myIndex = availNum.indexOf(myInput);
+                    availNum.splice(myIndex, 1);
+
+                    // Check for Row and Column clears
+                    clearRow(xPos);
+                    clearCol(yPos);
+
+                    // Check if candidate tray is empty -> Refill if so
+                    if (availNum.length === 0) {
+                        availNums = newAvailNums();
+                        setStatus("Cleared choices! Generated new candidate numbers.", true);
+                    } else {
+                        setStatus("Valid move!", true);
+                    }
+
+                    return true;
+                } else {
+                    setStatus("Illegal move! Cell conflicts with Row or Column.");
+                    return false;
+                }
+            } else {
+                setStatus("Selected number is no longer available.");
+                return false;
+            }
+        }
+
+        function clearRow(rown) {
+            if (!matrix[rown].includes(0)) {
+                setStatus(`Row ${rown + 1} Cleared!`, true);
+                matrix[rown] = new Array(matrix[0].length).fill(0);
+            }
+        }
+
+        function clearCol(coln) {
+            let colValues = matrix.map(row => row[coln]);
+            if (!colValues.includes(0)) {
+                setStatus(`Column ${coln + 1} Cleared!`, true);
+                for (let r = 0; r < matrix.length; r++) {
+                    matrix[r][coln] = 0;
+                }
+            }
+        }
+
+        function newAvailNums() {
+            let availCand = [];
+            let n = matrix[0].length;
+
+            while (availCand.length < n) {
+                let randInt = Math.floor(Math.random() * n) + 1;
+                let getCount1 = matrix.flat().filter(num => num === randInt).length;
+                let newCount = availCand.filter(num => num === randInt).length;
+                let totalCount = getCount1 + newCount;
+
+                if (totalCount < n) {
+                    availCand.push(randInt);
+                }
+            }
+            return availCand;
+        }
+
+        function get_legal_moves(matrix) {
+            let allowedNumbers = [];
+            for (let i = 1; i <= matrix[0].length; i++) {
+                allowedNumbers.push(i);
+            }
+
+            const legalMovesMap = new Map();
+            let nRows = Array.from({ length: matrix.length }, () => []);
+            let nCols = Array.from({ length: matrix.length }, () => []);
+
+            for (let x = 0; x < matrix.length; x++) {
+                for (let y = 0; y < matrix.length; y++) {
+                    let cellValue = matrix[x][y];
+                    if (cellValue !== 0) {
+                        nRows[x].push(cellValue);
+                        nCols[y].push(cellValue);
+                    }
+                }
+            }
+
+            for (let r = 0; r < matrix.length; r++) {
+                for (let c = 0; c < matrix.length; c++) {
+                    let currentCellValue = matrix[r][c];
+                    let cellCordKey = r + "-" + c;
+
+                    if (currentCellValue !== 0) {
+                        legalMovesMap.set(cellCordKey, []);
+                        continue;
+                    }
+
+                    let validNumsForCell = [];
+                    for (let i = 0; i < allowedNumbers.length; i++) {
+                        let targetNum = allowedNumbers[i];
+                        let isInRow = nRows[r].includes(targetNum);
+                        let isInCol = nCols[c].includes(targetNum);
+
+                        if (!isInRow && !isInCol) {
+                            validNumsForCell.push(targetNum);
+                        }
+                    }
+                    legalMovesMap.set(cellCordKey, validNumsForCell);
+                }
+            }
+            return legalMovesMap;
+        }
+*/
+        // Start game on load
+        window.onload = initGame;
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latin Square Puzzle Game</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary-color: #4a90e2;
+            --primary-hover: #357abd;
+            --cell-bg: #eef2f7;
+            --cell-filled: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #cbd5e1;
+            --accent-color: #2ec4b6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .game-container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: var(--text-color);
+        }
+
+        /* GRID STYLING */
+        .grid-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            aspect-ratio: 1;
+            margin-bottom: 30px;
+        }
+
+        .cell {
+            background-color: var(--cell-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .cell:hover {
+            border-color: var(--primary-color);
+            background-color: #e2e8f0;
+        }
+
+        .cell.filled {
+            background-color: var(--cell-filled);
+            cursor: default;
+        }
+
+        .cell.target-highlight {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+        }
+
+        /* CANDIDATE TRAY STYLING */
+        .tray-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .candidates-tray {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .candidate-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            background-color: #ffffff;
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .candidate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-btn.selected {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(74, 144, 226, 0.4);
+        }
+
+        .candidate-btn.empty-slot {
+            border-color: #e2e8f0;
+            background-color: #f8fafc;
+            color: #cbd5e1;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* STATUS MESSAGE */
+        .status-message {
+            height: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            color: #ef4444;
+        }
+
+        .status-message.success {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Latin Square</h1>
+
+        <div id="gridBoard" class="grid-board"></div>
+
+        <div class="tray-label">Available Numbers</div>
+        <div id="candidatesTray" class="candidates-tray"></div>
+
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+
+</body>
+</html>
