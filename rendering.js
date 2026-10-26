@@ -14,6 +14,12 @@ function renderGrid() {
     const gridContainer = document.getElementById('gridBoard');
     gridContainer.innerHTML = '';
 
+    // --- DYNAMIC GRID SIZING ---
+    const n = matrix.length;
+    gridContainer.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
+    gridContainer.style.gridTemplateRows = `repeat(${n}, 1fr)`;
+
+    
     for (let r = 0; r < matrix.length; r++) {
         for (let c = 0; c < matrix[r].length; c++) {
             const cellObj = matrix[r][c];
