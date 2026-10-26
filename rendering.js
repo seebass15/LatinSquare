@@ -166,7 +166,7 @@ function showGameOverModal() {
 
 function restartGame() {
     // Reset matrix back to initial state (or a fresh blank/preset state)
-    matrix = createRandomMatrix(3)
+    matrix = createRandomMatrix(4)
     turnCounter = 0;
 
     // Hide modal
