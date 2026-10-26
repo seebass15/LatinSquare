@@ -1,5 +1,5 @@
 //check with previous version to see if clear row and celar col were actually working
-let matrix=createRandomMatrix(3);
+let matrix=createRandomMatrix(4);
 
 //inilize game
 console.log('GAME START');
