@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latin Square Puzzle - Home</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary-color: #4a90e2;
+            --text-color: #2c3e50;
+            --border-color: #cbd5e1;
+            --accent-color: #2ec4b6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .menu-container {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 28px;
+            color: var(--text-color);
+        }
+
+        p.subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .high-score-banner {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 30px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f0f7ff;
+        }
+
+        .btn-info {
+            background-color: #64748b;
+            box-shadow: 0 4px 6px rgba(100, 116, 139, 0.2);
+        }
+        
+        .btn-info:hover {
+            background-color: #475569;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <h1>Latin Square</h1>
+        <p class="subtitle">The Ultimate Logic & Survival Puzzle</p>
+
+        <div class="high-score-banner">
+            🏆 Best Score: <span id="homeHighScore">0</span>
+        </div>
+
+        <div class="menu-buttons">
+            <!-- Main arcade survival mode -->
+            <a href="latinSquare.html" class="btn">🎮 Play Arcade Mode</a>
+            
+            <!-- Future placeholders -->
+            <a href="classic.html" class="btn btn-secondary">🧩 Classic Mode</a>
+            <a href="info.html" class="btn btn-info">📖 How to Play</a>
+        </div>
+    </div>
+
+    <script>
+        // Automatically fetch and display the high score from local storage
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedHighScore = localStorage.getItem('latinSquareHighScore') || 0;
+            document.getElementById('homeHighScore').textContent = savedHighScore;
+        });
+    </script>
+
+</body>
+</html>
