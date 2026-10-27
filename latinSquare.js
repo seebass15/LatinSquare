@@ -1,5 +1,18 @@
+let gameMode = 'arcade'; // Can be 'arcade' or 'classic'
+
 //check with previous version to see if clear row and celar col were actually working
 let matrix=createRandomMatrix(4);
+
+
+// At startup in latinsquare.js:
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('mode') === 'classic') {
+    gameMode = 'classic';
+    console.log('CLASSIC MODE');
+    // Set classic-specific rules (e.g., make all 1-to-N candidates available)
+    availNum = [];
+    for (let i = 1; i <= matrix.length; i++) availNum.push(i);
+}else{console.log('ARCADE MODE');
 
 //inilize game
 console.log('GAME START');
@@ -74,7 +87,7 @@ function UserInput(inputChoice,availNum){
 
             clearChecker(xPos,yPos);
 
-
+if(gameMode=='arcade'){
             if(availNum.every(item=>item==0)){
                 console.log('choices are empty');
                 availNum.length = 0;
@@ -83,6 +96,11 @@ function UserInput(inputChoice,availNum){
             }else{
                 console.log(availNum)
             }
+
+        }else if (gameMode === 'classic') {
+        // Classic features: check if the whole grid is filled to win!
+        checkClassicWinCondition();
+    }
             moveSucess = true;
         }else{
             console.log('illegal move or number already there silly')
