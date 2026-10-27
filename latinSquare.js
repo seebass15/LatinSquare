@@ -99,7 +99,7 @@ if(gameMode=='arcade'){
 
         }else if (gameMode === 'classic') {
         // Classic features: check if the whole grid is filled to win!
-        checkClassicWinCondition();
+        //checkClassicWinCondition();
     }
             moveSucess = true;
         }else{
