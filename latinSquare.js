@@ -104,7 +104,7 @@ function UserInput(inputChoice,availNum){
         }
             }else if (gameMode === 'classic') {
         // Classic features: check if the whole grid is filled to win!
-        //checkClassicWinCondition();
+        checkClassicWinCondition();
     }
     }else{
         console.log('SORRY THAT NUMBER IS NOT AVAILABLE PLEASE TRY AGAIN')
