@@ -78,6 +78,7 @@ function UserInput(inputChoice,availNum){
 //console.log('this is the row were looking at '+matrix[yPos]+' this is the cell '+matrix[yPos][xPos]+' numCheck '+numCheck+' the cell cords '+cellCord)
 
         if(gameMode=='arcade'){
+            console.log('ARCADE MODE');
             if(numCheck.includes(myInput)){
 //console.log('allowed move'+numCheck+' my number '+availNum)
             matrix[yPos][xPos].value= myInput;
