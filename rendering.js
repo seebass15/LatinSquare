@@ -29,7 +29,7 @@ function renderGrid() {
             let className = `cell ${cellObj.value !== 0 ? 'filled' : ''}`;
 
             // Apply ice visual classes based on durability
-            if (cellObj.value !== 0) {
+            if (gameMode == 'arcade' && cellObj.value !== 0) {
                 if (cellObj.durability === 2) {
                     className += ' hp-2';
                 } else if (cellObj.durability >= 3) {
