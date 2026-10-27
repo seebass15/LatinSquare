@@ -12,7 +12,7 @@ if (urlParams.get('mode') === 'classic') {
     // Set classic-specific rules (e.g., make all 1-to-N candidates available)
     availNum = [];
     for (let i = 1; i <= matrix.length; i++) availNum.push(i);
-}else{console.log('ARCADE MODE');
+}else{console.log('ARCADE MODE');}
 
 //inilize game
 console.log('GAME START');
