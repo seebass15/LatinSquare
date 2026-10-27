@@ -77,7 +77,8 @@ function UserInput(inputChoice,availNum){
 //console.log(legalMovesMap1.get(cellCord));
 //console.log('this is the row were looking at '+matrix[yPos]+' this is the cell '+matrix[yPos][xPos]+' numCheck '+numCheck+' the cell cords '+cellCord)
 
-        if(numCheck.includes(myInput)){
+        if(gameMode=='arcade'){
+            if(numCheck.includes(myInput)){
 //console.log('allowed move'+numCheck+' my number '+availNum)
             matrix[yPos][xPos].value= myInput;
 //console.log(matrix);
@@ -86,7 +87,7 @@ function UserInput(inputChoice,availNum){
 
             clearChecker(xPos,yPos);
 
-if(gameMode=='arcade'){
+
             if(availNum.every(item=>item==0)){
                 console.log('choices are empty');
                 availNum.length = 0;
@@ -96,14 +97,14 @@ if(gameMode=='arcade'){
                 console.log(availNum)
             }
 
-        }else if (gameMode === 'classic') {
-        // Classic features: check if the whole grid is filled to win!
-        //checkClassicWinCondition();
-    }
             moveSucess = true;
         }else{
             console.log('illegal move or number already there silly')
         }
+            }else if (gameMode === 'classic') {
+        // Classic features: check if the whole grid is filled to win!
+        //checkClassicWinCondition();
+    }
     }else{
         console.log('SORRY THAT NUMBER IS NOT AVAILABLE PLEASE TRY AGAIN')
     }
