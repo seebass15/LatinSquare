@@ -2,7 +2,7 @@
 let selectedCandidateIndex = null;
 
 // ==================== INITIALIZATION ====================
-function initGameMode() {
+function initGame() {
     const urlParams = new URLSearchParams(window.location.search);
     gameMode = urlParams.get('mode') || 'arcade';
 
@@ -30,7 +30,7 @@ function initGameMode() {
 
 // Automatically trigger on page load
 window.addEventListener('DOMContentLoaded', () => {
-    initGameMode();
+    initGame();
 });
 
 // ==================== DOM RENDERERS ====================
