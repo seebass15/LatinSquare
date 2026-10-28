@@ -62,6 +62,35 @@ function createRandomMatrix(n){
     return(mat);
 }
 
+function generateClassicPuzzle(n) {
+    // 1. Generate a full, valid complete matrix (or use a base valid pattern)
+    // If your createRandomMatrix can be expanded to fill the whole grid:
+    let fullMatrix = createCompleteLatinSquare(n); 
+
+    // 2. Punch holes to create the puzzle board
+    // Keep roughly 40%-50% of the cells as clues depending on grid size (n)
+    let cluesToKeep = Math.max(n, Math.floor((n * n) * 0.5)); 
+    
+    let puzzleMatrix = JSON.parse(JSON.stringify(fullMatrix));
+    let removedCount = 0;
+    let targetRemoved = (n * n) - cluesToKeep;
+
+    while (removedCount < targetRemoved) {
+        let r = Math.floor(Math.random() * n);
+        let c = Math.floor(Math.random() * n);
+
+        if (puzzleMatrix[r][c].value !== 0) {
+            puzzleMatrix[r][c] = { value: 0, durability: 1, turnsAlive: 0, isClue: false };
+            removedCount++;
+        } else {
+            // Mark remaining cells as clues so the player can't overwrite them
+            puzzleMatrix[r][c].isClue = true;
+        }
+    }
+
+    return puzzleMatrix;
+}
+
 //function for user input
 function UserInput(inputChoice,availNum){
     myInput = Number(inputChoice[0])
