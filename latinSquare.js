@@ -62,6 +62,10 @@ function createRandomMatrix(n){
     return(mat);
 }
 
+
+
+
+
 function generateClassicPuzzle(n) {
     // 1. Generate a full, valid complete matrix (or use a base valid pattern)
     // If your createRandomMatrix can be expanded to fill the whole grid:
@@ -90,6 +94,34 @@ function generateClassicPuzzle(n) {
 
     return puzzleMatrix;
 }
+
+
+function createCompleteLatinSquare(n) {
+    // 1. Create and shuffle base numbers 1 to n
+    let baseRow = [];
+    for (let i = 1; i <= n; i++) baseRow.push(i);
+    baseRow.sort(() => Math.random() - 0.5); // Randomize layout variety
+
+    let matrix = [];
+    for (let r = 0; r < n; r++) {
+        let row = [];
+        for (let c = 0; c < n; c++) {
+            // Cyclically shift the base row to preserve Latin Square math rules
+            let val = baseRow[(c + r) % n];
+            row.push({
+                value: val,
+                durability: 1,
+                turnsAlive: 0,
+                isClue: true // Marked as permanent starting hints initially
+            });
+        }
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+
+
 
 //function for user input
 function UserInput(inputChoice,availNum){
