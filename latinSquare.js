@@ -1,7 +1,7 @@
 let gameMode = 'arcade'; // Can be 'arcade' or 'classic'
 
 //check with previous version to see if clear row and celar col were actually working
-let matrix=createRandomMatrix(4);
+//let matrix=createRandomMatrix(n);
 
 // At startup in latinsquare.js:
 const urlParams = new URLSearchParams(window.location.search);
