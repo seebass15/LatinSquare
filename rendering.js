@@ -2,12 +2,38 @@
 let selectedCandidateIndex = null;
 
 // ==================== INITIALIZATION ====================
-function initGame() {
-    availNums = newAvailNums();
+let gameMode = 'arcade'; // Default fallback
+
+function initGameMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    gameMode = urlParams.get('mode') || 'arcade';
+
+    if (gameMode === 'classic') {
+        console.log("🧩 Initializing Classic Mode...");
+        // Generate a guaranteed solvable puzzle matrix with pre-filled clues
+        matrix = generateClassicPuzzle(n);
+        
+        // Permanent toolbar: numbers 1 through n (do not spend/deplete them)
+        availNum = [];
+        for (let i = 1; i <= n; i++) availNum.push(i);
+        
+    } else {
+        console.log("🎮 Initializing Arcade Mode...");
+        // Standard random survival matrix
+        matrix = createRandomMatrix(n);
+        
+        // Rotating consumable batch
+        availNum = newAvailNums();
+    }
+
     renderGrid();
     renderCandidates();
-    setStatus("Select an available number below, then pick a cell.");
 }
+
+// Automatically trigger on page load
+window.addEventListener('DOMContentLoaded', () => {
+    initGameMode();
+});
 
 // ==================== DOM RENDERERS ====================
 function renderGrid() {
