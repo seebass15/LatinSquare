@@ -2,8 +2,6 @@
 let selectedCandidateIndex = null;
 
 // ==================== INITIALIZATION ====================
-let gameMode = 'arcade'; // Default fallback
-
 function initGameMode() {
     const urlParams = new URLSearchParams(window.location.search);
     gameMode = urlParams.get('mode') || 'arcade';
