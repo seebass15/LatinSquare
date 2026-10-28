@@ -12,8 +12,8 @@ function initGame(n) {
         matrix = generateClassicPuzzle(n);
         
         // Permanent toolbar: numbers 1 through n (do not spend/deplete them)
-        availNum = [];
-        for (let i = 1; i <= n; i++) availNum.push(i);
+        availNums = [];
+        for (let i = 1; i <= n; i++) availNums.push(i);
         
     } else {
         console.log("🎮 Initializing Arcade Mode...");
@@ -21,7 +21,7 @@ function initGame(n) {
         matrix = createRandomMatrix(n);
         
         // Rotating consumable batch
-        availNum = newAvailNums();
+        availNums = newAvailNums();
     }
 
     renderGrid();
