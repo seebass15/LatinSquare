@@ -1,6 +1,6 @@
 // ==================== UI STATE ====================
 let selectedCandidateIndex = null;
-
+let availableNums =[];
 // ==================== INITIALIZATION ====================
 function initGame(n) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -12,7 +12,7 @@ function initGame(n) {
         matrix = generateClassicPuzzle(n);
         
         // Permanent toolbar: numbers 1 through n (do not spend/deplete them)
-        availNums = [];
+        //availNums = [];
         for (let i = 1; i <= n; i++) availNums.push(i);
         
     } else {
