@@ -78,7 +78,7 @@ if (gameMode === 'classic') {
     isAvailable = availNum.includes(myInput);
 }
 
-    if(isAvailable)){
+    if(isAvailable){
         //get all legal moves
         let legalMovesMap1 = get_legal_moves(matrix);//might need to be local
         let numCheck = legalMovesMap1.get(cellCord);
