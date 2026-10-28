@@ -70,24 +70,32 @@ function UserInput(inputChoice,availNum){
     let cellCord = yPos+'-'+xPos;
     let moveSucess = false;
 
-    if(availNum.includes(myInput)){
+let isAvailable;
+
+if (gameMode === 'classic') {
+    isAvailable = true;
+} else {
+    isAvailable = availNum.includes(myInput);
+}
+
+    if(isAvailable)){
         //get all legal moves
         let legalMovesMap1 = get_legal_moves(matrix);//might need to be local
         let numCheck = legalMovesMap1.get(cellCord);
 //console.log(legalMovesMap1.get(cellCord));
 //console.log('this is the row were looking at '+matrix[yPos]+' this is the cell '+matrix[yPos][xPos]+' numCheck '+numCheck+' the cell cords '+cellCord)
 
-        if(gameMode=='arcade'){
-            console.log('ARCADE MODE');
-            if(numCheck.includes(myInput)){
+        if(numCheck.includes(myInput)){
 //console.log('allowed move'+numCheck+' my number '+availNum)
             matrix[yPos][xPos].value= myInput;
 //console.log(matrix);
             myIndex = availNum.indexOf(myInput);
             availNum[myIndex]= 0;
 
-            clearChecker(xPos,yPos);
 
+
+if(gameMode=='arcade'){
+            clearChecker(xPos,yPos);
 
             if(availNum.every(item=>item==0)){
                 console.log('choices are empty');
@@ -97,15 +105,11 @@ function UserInput(inputChoice,availNum){
             }else{
                 console.log(availNum)
             }
-
+}
             moveSucess = true;
         }else{
             console.log('illegal move or number already there silly')
         }
-            }else if (gameMode === 'classic') {
-        // Classic features: check if the whole grid is filled to win!
-        checkClassicWinCondition();
-    }
     }else{
         console.log('SORRY THAT NUMBER IS NOT AVAILABLE PLEASE TRY AGAIN')
     }
@@ -113,6 +117,7 @@ function UserInput(inputChoice,availNum){
     //game over check
     console.log(availNum);
     if(moveSucess){
+if(gameMode=='arcade'){
         turnCounter++;
         console.log('turns '+turnCounter);
 
@@ -124,15 +129,27 @@ function UserInput(inputChoice,availNum){
         }else if(turnCounter>=90){
             shouldHarden(3); 
         }   
-        
+
         if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
             if(typeof showGameOverModal == 'function'){showGameOverModal()}
+        }
+}else if(gameMode='classic'){
+// Classic Mode Win Check: Check if the grid has any empty (0) cells left
+            let hasZeros = matrix.some(row => row.some(cell => cell.value === 0));
+            if(!hasZeros){
+                console.log('🎉 Classic Mode Solved!');
+                // You can trigger a victory modal or status message here!
+                const statusEl = document.getElementById('statusMessage');
+                if(statusEl) {
+                    statusEl.style.color = "#2ec4b6";
+                    statusEl.textContent = "Puzzle Completed! Perfect Latin Square!";
+                }
+            }
         }
         return(matrix)
     }  
     return null;
 }
-
 
 function newAvailNums(){//NEED TO FIX TO ENSURE POSSIBLE MOVES
     console.log('AVAILABLE NUMBERS');
