@@ -207,5 +207,3 @@ function restartGame() {
     // Re-initialize game
     initGame();
 }
-// Start game on load
-window.onload = initGame;
