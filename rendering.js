@@ -9,7 +9,7 @@ function initGame(n) {
         console.log("🧩 Initializing Classic Mode...");
         // Generate a guaranteed solvable puzzle matrix with pre-filled clues
         matrix = generateClassicPuzzle(n);
-        
+        console.log(matrix);
         // Permanent toolbar: numbers 1 through n (do not spend/deplete them)
         //availNums = [];
         for (let i = 1; i <= n; i++) availNum.push(i);
