@@ -134,8 +134,10 @@ if (gameMode === 'classic') {
 //console.log('allowed move'+numCheck+' my number '+availNum)
             matrix[yPos][xPos].value= myInput;
 //console.log(matrix);
+if(gameMode == 'arcade'){
             myIndex = availNum.indexOf(myInput);
             availNum[myIndex]= 0;
+}
 
 
 
