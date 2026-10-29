@@ -12,7 +12,7 @@ function initGame(n) {
         
         // Permanent toolbar: numbers 1 through n (do not spend/deplete them)
         //availNums = [];
-        for (let i = 1; i <= n; i++) availNums.push(i);
+        for (let i = 1; i <= n; i++) availNum.push(i);
         
     } else {
         console.log("🎮 Initializing Arcade Mode...");
@@ -20,7 +20,7 @@ function initGame(n) {
         matrix = createRandomMatrix(n);
         
         // Rotating consumable batch
-        availNums = newAvailNums();
+        availNum = newAvailNums();
     }
 
     renderGrid();
@@ -92,7 +92,7 @@ function renderCandidates() {
     const trayContainer = document.getElementById('candidatesTray');
     trayContainer.innerHTML = '';
 
-    availNums.forEach((num, index) => {
+    availNum.forEach((num, index) => {
         const btn = document.createElement('button');
         
         // Added `num === 0` here so it recognizes used slots!
@@ -117,11 +117,11 @@ function handleCellClick(r, c) {
         return;
     }
 
-    const chosenNum = availNums[selectedCandidateIndex];
+    const chosenNum = availNum[selectedCandidateIndex];
     const inputChoice = [chosenNum, r, c];
 
     // Call engine function (returns matrix on success, or undefined/falsy on failure)
-    const resultMatrix = UserInput(inputChoice, availNums);
+    const resultMatrix = UserInput(inputChoice, availNum);
 
     // If UserInput returned the matrix, the move was successful!
     if (resultMatrix) {
@@ -130,7 +130,7 @@ function handleCellClick(r, c) {
         renderCandidates();
 
         // Check if the tray got refilled (every item is 0 or fresh pool generated)
-        if (availNums.every(item => item === 0)) {
+        if (availNum.every(item => item === 0)) {
             setStatus("Cleared choices! Generated new candidate numbers.", true);
         } else {
             setStatus("Valid move!", true);
@@ -146,11 +146,11 @@ function handleCellClick(r, c) {
         return;
     }
 
-    const chosenNum = availNums[selectedCandidateIndex];
+    const chosenNum = availNum[selectedCandidateIndex];
     const inputChoice = [chosenNum, r, c];
 
     // Call engine function
-    const resultMatrix = UserInput(inputChoice, availNums);
+    const resultMatrix = UserInput(inputChoice, availNum);
 
     if (resultMatrix) {
         // Successful move
@@ -158,7 +158,7 @@ function handleCellClick(r, c) {
         renderGrid();
         renderCandidates();
 
-        if (availNums.every(item => item === 0)) {
+        if (availNum.every(item => item === 0)) {
             setStatus("Cleared choices! Generated new candidate numbers.", true);
         } else {
             setStatus("Valid move!", true);
@@ -179,10 +179,10 @@ function setStatus(msg, isSuccess = false) {
 
 // ==================== EVENT HANDLERS ====================
 function handleCandidateSelect(index) {
-    if (availNums[index] === null || availNums[index] === undefined || availNums[index] === 0) return;
+    if (availNum[index] === null || availNum[index] === undefined || availNum[index] === 0) return;
     selectedCandidateIndex = index;
     renderCandidates();
-    setStatus(`Selected number ${availNums[index]}. Now tap an empty cell.`, true);
+    setStatus(`Selected number ${availNum[index]}. Now tap an empty cell.`, true);
 }
 
 // ==================== GAME OVER'S ====================
