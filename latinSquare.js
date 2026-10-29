@@ -7,9 +7,6 @@ let turnCounter = 0;
 //check with previous version to see if clear row and celar col were actually working
 //let matrix=createRandomMatrix(n);
 
-//inilize game
-console.log('GAME START');
-console.log(matrix);
 
 //let turnCounter = 0;
 
