@@ -21,7 +21,8 @@ if (urlParams.get('mode') === 'classic') {
 console.log('GAME START');
 console.log(matrix);
 
-let turnCounter = 0;
+//let turnCounter = 0;
+
 //let availNums = newAvailNums();
 
 let inputChoice = [,,];
