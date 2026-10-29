@@ -2,6 +2,8 @@
 let selectedCandidateIndex = null;
 let availableNums =[];
 let matrix=[];
+let turnCounter = 0;
+let gameMode = 'arcade';
 // ==================== INITIALIZATION ====================
 function initGame(n) {
     const urlParams = new URLSearchParams(window.location.search);
