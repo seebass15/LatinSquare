@@ -71,53 +71,21 @@ function createRandomMatrix(n){
 
 
 
-function generateClassicPuzzle(n) {
-    // 1. Generate a full, valid complete matrix (or use a base valid pattern)
-    // If your createRandomMatrix can be expanded to fill the whole grid:
-    let fullMatrix = createCompleteLatinSquare(n); 
-
-    // 2. Punch holes to create the puzzle board
-    // Keep roughly 40%-50% of the cells as clues depending on grid size (n)
-    let cluesToKeep = Math.max(n, Math.floor((n * n) * 0.5)); 
-    
-    let puzzleMatrix = JSON.parse(JSON.stringify(fullMatrix));
-    let removedCount = 0;
-    let targetRemoved = (n * n) - cluesToKeep;
-
-    while (removedCount < targetRemoved) {
-        let r = Math.floor(Math.random() * n);
-        let c = Math.floor(Math.random() * n);
-
-        if (puzzleMatrix[r][c].value !== 0) {
-            puzzleMatrix[r][c] = { value: 0, durability: 1, turnsAlive: 0, isClue: false };
-            removedCount++;
-        } else {
-            // Mark remaining cells as clues so the player can't overwrite them
-            puzzleMatrix[r][c].isClue = true;
-        }
-    }
-
-    return puzzleMatrix;
-}
-
-
+// 1. Generates a fully solved, valid Latin Square base
 function createCompleteLatinSquare(n) {
-    // 1. Create and shuffle base numbers 1 to n
     let baseRow = [];
     for (let i = 1; i <= n; i++) baseRow.push(i);
-    baseRow.sort(() => Math.random() - 0.5); // Randomize layout variety
+    baseRow.sort(() => Math.random() - 0.5); // Randomize variety
 
     let matrix = [];
     for (let r = 0; r < n; r++) {
         let row = [];
         for (let c = 0; c < n; c++) {
-            // Cyclically shift the base row to preserve Latin Square math rules
             let val = baseRow[(c + r) % n];
             row.push({
                 value: val,
                 durability: 1,
-                turnsAlive: 0,
-                isClue: true // Marked as permanent starting hints initially
+                turnsAlive: 0
             });
         }
         matrix.push(row);
@@ -125,6 +93,30 @@ function createCompleteLatinSquare(n) {
     return matrix;
 }
 
+// 2. Punches holes to create the puzzle board with starting clues
+function generateClassicPuzzle(n) {
+    let fullMatrix = createCompleteLatinSquare(n);
+    
+    // Determine how many clues to keep (roughly 50% for 3x3 or 4x4)
+    let cluesToKeep = Math.max(n, Math.floor((n * n) * 0.5)); 
+    let puzzleMatrix = JSON.parse(JSON.stringify(fullMatrix));
+    
+    let removedCount = 0;
+    let targetRemoved = (n * n) - cluesToKeep;
+
+    // Randomly clear cells to turn them into empty playable spaces (0)
+    while (removedCount < targetRemoved) {
+        let r = Math.floor(Math.random() * n);
+        let c = Math.floor(Math.random() * n);
+
+        if (puzzleMatrix[r][c].value !== 0) {
+            puzzleMatrix[r][c] = { value: 0, durability: 1, turnsAlive: 0 };
+            removedCount++;
+        }
+    }
+
+    return puzzleMatrix;
+}
 
 
 
