@@ -160,7 +160,7 @@ if(gameMode=='arcade'){
     }
 
     //game over check
-    console.log(availNum);
+    //console.log(availNum);
     if(moveSucess){
 if(gameMode=='arcade'){
         turnCounter++;
