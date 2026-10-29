@@ -2,6 +2,7 @@
 let selectedCandidateIndex = null;
 let availableNums =[];
 let matrix;
+console.log('hi');
 // ==================== INITIALIZATION ====================
 function initGame(n) {
     const urlParams = new URLSearchParams(window.location.search);
