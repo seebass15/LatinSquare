@@ -1,4 +1,8 @@
 let gameMode = 'arcade'; // Can be 'arcade' or 'classic'
+let selectedCandidateIndex = null;
+let availableNums =[];
+let matrix=[];
+let turnCounter = 0;
 
 //check with previous version to see if clear row and celar col were actually working
 //let matrix=createRandomMatrix(n);
