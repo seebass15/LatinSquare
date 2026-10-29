@@ -7,16 +7,6 @@ let turnCounter = 0;
 //check with previous version to see if clear row and celar col were actually working
 //let matrix=createRandomMatrix(n);
 
-// At startup in latinsquare.js:
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('mode') === 'classic') {
-    gameMode = 'classic';
-    console.log('CLASSIC MODE');
-    // Set classic-specific rules (e.g., make all 1-to-N candidates available)
-    //availNum = [];
-    for (let i = 1; i <= matrix.length; i++) availNum.push(i);
-}else{console.log('ARCADE MODE');}
-
 //inilize game
 console.log('GAME START');
 console.log(matrix);
