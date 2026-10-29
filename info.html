@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
     <title>How to Play - Latin Square</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your main stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="info-body">
     <div class="info-container">
@@ -12,15 +13,15 @@
         
         <section class="rule-section">
             <h2>The Core Rule</h2>
-            <p>A <strong>Latin Square</strong> is an <em>n × n</em> grid filled with $n$ different numbers, such that each number appears exactly once in each row and exactly once in each column (similar to Sudoku's uniqueness rule).</p>
+            <p>A <strong>Latin Square</strong> is an n × n grid filled with numbers, such that each number appears exactly once in each row and exactly once in each column.</p>
         </section>
 
         <section class="rule-section">
             <h2>🎮 Arcade Mode (Survival)</h2>
             <ul>
-                <li><strong>Dynamic Tray:</strong> Numbers appear in a rotating candidate batch. When you place a number, it's spent from your tray until the batch is empty and refreshes.</li>
-                <li><strong>Cell Aging:</strong> Every turn, cells age and their durability changes. Watch out for hardening blocks!</li>
-                <li><strong>Survival Goal:</strong> Keep clearing rows and columns to stay alive and rack up high scores before the board locks up.</li>
+                <li><strong>Dynamic Tray:</strong> Numbers appear in a rotating candidate batch. Placed numbers are spent from your tray until the batch refreshes.</li>
+                <li><strong>Cell Aging:</strong> Every turn, cells age and harden. Watch out for locking blocks!</li>
+                <li><strong>Survival Goal:</strong> Keep clearing rows and columns to stay alive and rack up high scores.</li>
             </ul>
         </section>
 
@@ -28,7 +29,7 @@
             <h2>🧩 Classic Mode (Puzzle Solver)</h2>
             <ul>
                 <li><strong>Guaranteed Solvable:</strong> Every puzzle starts with randomized pre-filled clues and is mathematically guaranteed to have a solution.</li>
-                <li><strong>Permanent Toolbar:</strong> Your candidates (`1` to `n`) act as a permanent toolbar—you can select and stamp numbers as many times as you need.</li>
+                <li><strong>Permanent Toolbar:</strong> Candidates act as a permanent toolbar—select and stamp numbers as many times as you need.</li>
                 <li><strong>Logic Goal:</strong> Fill out the entire grid completely without breaking row and column uniqueness!</li>
             </ul>
         </section>
