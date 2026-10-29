@@ -1,6 +1,6 @@
 let gameMode = 'arcade'; // Can be 'arcade' or 'classic'
 let selectedCandidateIndex = null;
-let availableNums =[];
+let availNum =[];
 let matrix=[];
 let turnCounter = 0;
 
@@ -13,7 +13,7 @@ if (urlParams.get('mode') === 'classic') {
     gameMode = 'classic';
     console.log('CLASSIC MODE');
     // Set classic-specific rules (e.g., make all 1-to-N candidates available)
-    availNum = [];
+    //availNum = [];
     for (let i = 1; i <= matrix.length; i++) availNum.push(i);
 }else{console.log('ARCADE MODE');}
 
