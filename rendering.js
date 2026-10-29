@@ -1,8 +1,7 @@
 // ==================== UI STATE ====================
 let selectedCandidateIndex = null;
 let availableNums =[];
-let matrix;
-console.log('hi');
+let matrix=[];
 // ==================== INITIALIZATION ====================
 function initGame(n) {
     const urlParams = new URLSearchParams(window.location.search);
