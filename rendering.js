@@ -5,6 +5,7 @@ function initGame(n) {
     const urlParams = new URLSearchParams(window.location.search);
     gameMode = urlParams.get('mode') || 'arcade';
 
+    updateHUD();//unsure where to call?
     if (gameMode === 'classic') {
         console.log("🧩 Initializing Classic Mode...");
         // Generate a guaranteed solvable puzzle matrix with pre-filled clues
@@ -176,6 +177,19 @@ function setStatus(msg, isSuccess = false) {
 }
 
 
+function updateHUD() {
+    const labelEl = document.getElementById('scoreBadgeLabel');
+    const valueEl = document.getElementById('scoreBadgeValue');
+
+    if (gameMode === 'classic') {
+        if (labelEl) labelEl.textContent = "Turns:";
+        if (valueEl) valueEl.textContent = turnCounter;
+    } else {
+        if (labelEl) labelEl.textContent = "Score:";
+        if (valueEl) valueEl.textContent = score;
+    }
+}
+
 
 // ==================== EVENT HANDLERS ====================
 function handleCandidateSelect(index) {
@@ -198,6 +212,8 @@ function restartGame() {
     matrix = createRandomMatrix(4)
     turnCounter = 0;
 
+    updateHUD();//unsure where to call?
+    
     // Hide modal
     const modal = document.getElementById('gameOverModal');
     if (modal) {
