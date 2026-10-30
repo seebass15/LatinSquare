@@ -3,6 +3,9 @@ let selectedCandidateIndex = null;
 let availNum =[];
 let matrix=[];
 let turnCounter = 0;
+let score = 0;
+let streak = 0;
+let highScore = localStorage.getItem('latinSquareHighScore') || 0;
 
 //check with previous version to see if clear row and celar col were actually working
 //let matrix=createRandomMatrix(n);
@@ -142,8 +145,9 @@ if(gameMode == 'arcade'){
 
 
 if(gameMode=='arcade'){
-            clearChecker(xPos,yPos);
 
+            clearChecker(xPos,yPos);
+            
             if(availNum.every(item=>item==0)){
                 console.log('choices are empty');
                 availNum.length = 0;
@@ -236,29 +240,9 @@ function clearChecker(coln,rown){
 //console.log('rows '+boolCheckr);
 //console.log('cols '+boolCheckc);
 
-    //rows
-    /*if(matrix[rown].includes(0)){
-        boolCheckr = true;
-        console.log('still good here row')
-    }
-    else{
-        boolCheckr=false;
-        console.log('CLEAR THE ROW ADD SOME POINTS')
-    }
-
-    //columns
-    let columnArray = matrix.map(myCol => myCol[coln]);
-    if (columnArray.includes(0)) {
-        boolCheckc = true;
-        console.log('still good here column');
-    } else {
-        boolCheckc = false;
-        console.log('CLEAR THE column ADD SOME POINTS');
-    }*/
-
     if(boolCheckc){
         console.log('CLEAR THE column ADD SOME POINTS');
-        
+        scoring(streak);
         
             
         for(r=0;r<matrix[0].length;r++){
@@ -271,6 +255,7 @@ function clearChecker(coln,rown){
     }
     if(boolCheckr){
         console.log('CLEAR THE ROW ADD SOME POINTS')
+        scoring(streak);
         
         for (let c = 0; c < matrix[rown].length; c++) {
             // Reduce durability for this cell
@@ -345,6 +330,20 @@ function shouldHarden(n,freq){//NEED TO THINK OF A WAY TO NOT HARD CODE THIS
 }
 
 
+function scoring(sk){
+    streak++;
+    rcScore = 10;//amount of points per clear
+    score += (streak*rcScore);
+
+    if(score>highScore){
+        highScore = score;
+        localStorage.setItem('latinSquareHighScore '+highScore);
+        console.log('CONGRATS NEW HIGH SCORE');
+    }
+    console.log('Score: '+score+' | Streak: '+streak);
+    updateHUD();
+}
+    
 function get_legal_moves(matrix){//might need to move below nRows etc.
     //generating allowed numbers(should be able to do this without for loop
     allowedNumbers = [];
