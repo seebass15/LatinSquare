@@ -337,7 +337,7 @@ function scoring(sk){
 
     if(score>highScore){
         highScore = score;
-        localStorage.setItem('latinSquareHighScore '+highScore);
+        localStorage.setItem('latinSquareHighScore',highScore);
         console.log('CONGRATS NEW HIGH SCORE');
     }
     console.log('Score: '+score+' | Streak: '+streak);
