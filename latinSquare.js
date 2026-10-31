@@ -347,10 +347,10 @@ function shouldHarden(n,freq){//NEED TO THINK OF A WAY TO NOT HARD CODE THIS
 }
 
 
-function scoring(sk){
+function scoring(linesCl = 1){//defaults linesCl to 1
     streak++;
     rcScore = 10;//amount of points per clear
-    score += (streak*rcScore);
+    score += (streak*rcScore*linesCl);
 
     if(score>highScore){
         highScore = score;
