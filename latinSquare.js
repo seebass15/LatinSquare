@@ -1,11 +1,18 @@
-//check with previous version to see if clear row and celar col were actually working
-let matrix=createRandomMatrix(4);
-
-//inilize game
-console.log('GAME START');
-console.log(matrix);
-
+let gameMode = 'arcade'; // Can be 'arcade' or 'classic'
+let selectedCandidateIndex = null;
+let availNum =[];
+let matrix=[];
 let turnCounter = 0;
+let score = 0;
+let streak = 0;
+let highScore = localStorage.getItem('latinSquareHighScore') || 0;
+
+//check with previous version to see if clear row and celar col were actually working
+//let matrix=createRandomMatrix(n);
+
+
+//let turnCounter = 0;
+
 //let availNums = newAvailNums();
 
 let inputChoice = [,,];
@@ -50,6 +57,59 @@ function createRandomMatrix(n){
     return(mat);
 }
 
+
+
+
+
+// 1. Generates a fully solved, valid Latin Square base
+function createCompleteLatinSquare(n) {
+    let baseRow = [];
+    for (let i = 1; i <= n; i++) baseRow.push(i);
+    baseRow.sort(() => Math.random() - 0.5); // Randomize variety
+
+    let matrix = [];
+    for (let r = 0; r < n; r++) {
+        let row = [];
+        for (let c = 0; c < n; c++) {
+            let val = baseRow[(c + r) % n];
+            row.push({
+                value: val,
+                durability: 1,
+                turnsAlive: 0
+            });
+        }
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+// 2. Punches holes to create the puzzle board with starting clues
+function generateClassicPuzzle(n) {
+    let fullMatrix = createCompleteLatinSquare(n);
+    
+    // Determine how many clues to keep (roughly 50% for 3x3 or 4x4)
+    let cluesToKeep = Math.max(n, Math.floor((n * n) * 0.5)); 
+    let puzzleMatrix = JSON.parse(JSON.stringify(fullMatrix));
+    
+    let removedCount = 0;
+    let targetRemoved = (n * n) - cluesToKeep;
+
+    // Randomly clear cells to turn them into empty playable spaces (0)
+    while (removedCount < targetRemoved) {
+        let r = Math.floor(Math.random() * n);
+        let c = Math.floor(Math.random() * n);
+
+        if (puzzleMatrix[r][c].value !== 0) {
+            puzzleMatrix[r][c] = { value: 0, durability: 1, turnsAlive: 0 };
+            removedCount++;
+        }
+    }
+
+    return puzzleMatrix;
+}
+
+
+
 //function for user input
 function UserInput(inputChoice,availNum){
     myInput = Number(inputChoice[0])
@@ -58,7 +118,15 @@ function UserInput(inputChoice,availNum){
     let cellCord = yPos+'-'+xPos;
     let moveSucess = false;
 
-    if(availNum.includes(myInput)){
+let isAvailable;
+
+if (gameMode === 'classic') {
+    isAvailable = true;
+} else {
+    isAvailable = availNum.includes(myInput);
+}
+
+    if(isAvailable){
         //get all legal moves
         let legalMovesMap1 = get_legal_moves(matrix);//might need to be local
         let numCheck = legalMovesMap1.get(cellCord);
@@ -69,12 +137,17 @@ function UserInput(inputChoice,availNum){
 //console.log('allowed move'+numCheck+' my number '+availNum)
             matrix[yPos][xPos].value= myInput;
 //console.log(matrix);
+if(gameMode == 'arcade'){
             myIndex = availNum.indexOf(myInput);
             availNum[myIndex]= 0;
+}
+
+
+
+if(gameMode=='arcade'){
 
             clearChecker(xPos,yPos);
-
-
+            
             if(availNum.every(item=>item==0)){
                 console.log('choices are empty');
                 availNum.length = 0;
@@ -83,6 +156,7 @@ function UserInput(inputChoice,availNum){
             }else{
                 console.log(availNum)
             }
+}
             moveSucess = true;
         }else{
             console.log('illegal move or number already there silly')
@@ -92,8 +166,9 @@ function UserInput(inputChoice,availNum){
     }
 
     //game over check
-    console.log(availNum);
+    //console.log(availNum);
     if(moveSucess){
+if(gameMode=='arcade'){
         turnCounter++;
         console.log('turns '+turnCounter);
 
@@ -105,15 +180,27 @@ function UserInput(inputChoice,availNum){
         }else if(turnCounter>=90){
             shouldHarden(3); 
         }   
-        
+
         if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
             if(typeof showGameOverModal == 'function'){showGameOverModal()}
+        }
+}else if(gameMode='classic'){
+// Classic Mode Win Check: Check if the grid has any empty (0) cells left
+            let hasZeros = matrix.some(row => row.some(cell => cell.value === 0));
+            if(!hasZeros){
+                console.log('🎉 Classic Mode Solved!');
+                // You can trigger a victory modal or status message here!
+                const statusEl = document.getElementById('statusMessage');
+                if(statusEl) {
+                    statusEl.style.color = "#2ec4b6";
+                    statusEl.textContent = "Puzzle Completed! Perfect Latin Square!";
+                }
+            }
         }
         return(matrix)
     }  
     return null;
 }
-
 
 function newAvailNums(){//NEED TO FIX TO ENSURE POSSIBLE MOVES
     console.log('AVAILABLE NUMBERS');
@@ -153,29 +240,11 @@ function clearChecker(coln,rown){
 //console.log('rows '+boolCheckr);
 //console.log('cols '+boolCheckc);
 
-    //rows
-    /*if(matrix[rown].includes(0)){
-        boolCheckr = true;
-        console.log('still good here row')
-    }
-    else{
-        boolCheckr=false;
-        console.log('CLEAR THE ROW ADD SOME POINTS')
-    }
-
-    //columns
-    let columnArray = matrix.map(myCol => myCol[coln]);
-    if (columnArray.includes(0)) {
-        boolCheckc = true;
-        console.log('still good here column');
-    } else {
-        boolCheckc = false;
-        console.log('CLEAR THE column ADD SOME POINTS');
-    }*/
-
+    let linesCleared = 0;
+    
     if(boolCheckc){
         console.log('CLEAR THE column ADD SOME POINTS');
-        
+        linesCleared++;
         
             
         for(r=0;r<matrix[0].length;r++){
@@ -188,6 +257,7 @@ function clearChecker(coln,rown){
     }
     if(boolCheckr){
         console.log('CLEAR THE ROW ADD SOME POINTS')
+        linesCleared++;
         
         for (let c = 0; c < matrix[rown].length; c++) {
             // Reduce durability for this cell
@@ -198,6 +268,21 @@ function clearChecker(coln,rown){
                 matrix[rown][c] = { value: 0, durability: 1,turnsAlive:0 };
             }
         }
+    }
+
+    
+    // Process scoring and streaks based on total lines cleared in this single move
+    if (linesCleared > 0) {
+        scoring(linesClearedCount); // Pass the count!
+        return true;
+    } else {
+        // Arcade Rule: If you place a tile and clear NOTHING, streak resets!
+        if (gameMode === 'arcade') {
+            streak = 0;
+            console.log("Streak reset to 0 (no lines cleared).");
+            updateHUD();
+        }
+        return false;
     }
 
 }
@@ -262,6 +347,20 @@ function shouldHarden(n,freq){//NEED TO THINK OF A WAY TO NOT HARD CODE THIS
 }
 
 
+function scoring(linesCl = 1){//defaults linesCl to 1
+    streak++;
+    rcScore = 10;//amount of points per clear
+    score += (streak*rcScore*linesCl);
+
+    if(score>highScore){
+        highScore = score;
+        localStorage.setItem('latinSquareHighScore',highScore);
+        console.log('CONGRATS NEW HIGH SCORE');
+    }
+    console.log('Score: '+score+' | Streak: '+streak);
+    updateHUD();
+}
+    
 function get_legal_moves(matrix){//might need to move below nRows etc.
     //generating allowed numbers(should be able to do this without for loop
     allowedNumbers = [];

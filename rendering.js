@@ -1,13 +1,37 @@
 // ==================== UI STATE ====================
-let selectedCandidateIndex = null;
 
 // ==================== INITIALIZATION ====================
-function initGame() {
-    availNums = newAvailNums();
+function initGame(n) {
+    const urlParams = new URLSearchParams(window.location.search);
+    gameMode = urlParams.get('mode') || 'arcade';
+
+    updateHUD();//unsure where to call?
+    if (gameMode === 'classic') {
+        console.log("🧩 Initializing Classic Mode...");
+        // Generate a guaranteed solvable puzzle matrix with pre-filled clues
+        matrix = generateClassicPuzzle(n);
+        console.log(matrix);
+        // Permanent toolbar: numbers 1 through n (do not spend/deplete them)
+        //availNums = [];
+        for (let i = 1; i <= n; i++) availNum.push(i);
+        
+    } else {
+        console.log("🎮 Initializing Arcade Mode...");
+        // Standard random survival matrix
+        matrix = createRandomMatrix(n);
+        
+        // Rotating consumable batch
+        availNum = newAvailNums();
+    }
+
     renderGrid();
     renderCandidates();
-    setStatus("Select an available number below, then pick a cell.");
 }
+
+// Automatically trigger on page load
+window.addEventListener('DOMContentLoaded', () => {
+    initGame(4);
+});
 
 // ==================== DOM RENDERERS ====================
 function renderGrid() {
@@ -29,7 +53,7 @@ function renderGrid() {
             let className = `cell ${cellObj.value !== 0 ? 'filled' : ''}`;
 
             // Apply ice visual classes based on durability
-            if (cellObj.value !== 0) {
+            if (gameMode == 'arcade' && cellObj.value !== 0) {
                 if (cellObj.durability === 2) {
                     className += ' hp-2';
                 } else if (cellObj.durability >= 3) {
@@ -69,7 +93,7 @@ function renderCandidates() {
     const trayContainer = document.getElementById('candidatesTray');
     trayContainer.innerHTML = '';
 
-    availNums.forEach((num, index) => {
+    availNum.forEach((num, index) => {
         const btn = document.createElement('button');
         
         // Added `num === 0` here so it recognizes used slots!
@@ -94,11 +118,11 @@ function handleCellClick(r, c) {
         return;
     }
 
-    const chosenNum = availNums[selectedCandidateIndex];
+    const chosenNum = availNum[selectedCandidateIndex];
     const inputChoice = [chosenNum, r, c];
 
     // Call engine function (returns matrix on success, or undefined/falsy on failure)
-    const resultMatrix = UserInput(inputChoice, availNums);
+    const resultMatrix = UserInput(inputChoice, availNum);
 
     // If UserInput returned the matrix, the move was successful!
     if (resultMatrix) {
@@ -107,7 +131,7 @@ function handleCellClick(r, c) {
         renderCandidates();
 
         // Check if the tray got refilled (every item is 0 or fresh pool generated)
-        if (availNums.every(item => item === 0)) {
+        if (availNum.every(item => item === 0)) {
             setStatus("Cleared choices! Generated new candidate numbers.", true);
         } else {
             setStatus("Valid move!", true);
@@ -123,11 +147,11 @@ function handleCellClick(r, c) {
         return;
     }
 
-    const chosenNum = availNums[selectedCandidateIndex];
+    const chosenNum = availNum[selectedCandidateIndex];
     const inputChoice = [chosenNum, r, c];
 
     // Call engine function
-    const resultMatrix = UserInput(inputChoice, availNums);
+    const resultMatrix = UserInput(inputChoice, availNum);
 
     if (resultMatrix) {
         // Successful move
@@ -135,7 +159,7 @@ function handleCellClick(r, c) {
         renderGrid();
         renderCandidates();
 
-        if (availNums.every(item => item === 0)) {
+        if (availNum.every(item => item === 0)) {
             setStatus("Cleared choices! Generated new candidate numbers.", true);
         } else {
             setStatus("Valid move!", true);
@@ -153,13 +177,26 @@ function setStatus(msg, isSuccess = false) {
 }
 
 
+function updateHUD() {
+    const labelEl = document.getElementById('scoreBadgeLabel');
+    const valueEl = document.getElementById('scoreBadgeValue');
+
+    if (gameMode === 'classic') {
+        if (labelEl) labelEl.textContent = "Turns:";
+        if (valueEl) valueEl.textContent = turnCounter;
+    } else {
+        if (labelEl) labelEl.textContent = "Score:";
+        if (valueEl) valueEl.textContent = score;
+    }
+}
+
 
 // ==================== EVENT HANDLERS ====================
 function handleCandidateSelect(index) {
-    if (availNums[index] === null || availNums[index] === undefined || availNums[index] === 0) return;
+    if (availNum[index] === null || availNum[index] === undefined || availNum[index] === 0) return;
     selectedCandidateIndex = index;
     renderCandidates();
-    setStatus(`Selected number ${availNums[index]}. Now tap an empty cell.`, true);
+    setStatus(`Selected number ${availNum[index]}. Now tap an empty cell.`, true);
 }
 
 // ==================== GAME OVER'S ====================
@@ -175,6 +212,8 @@ function restartGame() {
     matrix = createRandomMatrix(4)
     turnCounter = 0;
 
+    updateHUD();//unsure where to call?
+    
     // Hide modal
     const modal = document.getElementById('gameOverModal');
     if (modal) {
@@ -184,5 +223,3 @@ function restartGame() {
     // Re-initialize game
     initGame();
 }
-// Start game on load
-window.onload = initGame;
