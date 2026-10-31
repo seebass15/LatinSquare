@@ -273,7 +273,7 @@ function clearChecker(coln,rown){
     
     // Process scoring and streaks based on total lines cleared in this single move
     if (linesCleared > 0) {
-        scoring(linesClearedCount); // Pass the count!
+        scoring(linesCleared); // Pass the count!
         return true;
     } else {
         // Arcade Rule: If you place a tile and clear NOTHING, streak resets!
