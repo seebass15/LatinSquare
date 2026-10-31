@@ -240,9 +240,11 @@ function clearChecker(coln,rown){
 //console.log('rows '+boolCheckr);
 //console.log('cols '+boolCheckc);
 
+    let linesCleared = 0;
+    
     if(boolCheckc){
         console.log('CLEAR THE column ADD SOME POINTS');
-        scoring(streak);
+        linesCleared++;
         
             
         for(r=0;r<matrix[0].length;r++){
@@ -255,7 +257,7 @@ function clearChecker(coln,rown){
     }
     if(boolCheckr){
         console.log('CLEAR THE ROW ADD SOME POINTS')
-        scoring(streak);
+        linesCleared++;
         
         for (let c = 0; c < matrix[rown].length; c++) {
             // Reduce durability for this cell
@@ -266,6 +268,21 @@ function clearChecker(coln,rown){
                 matrix[rown][c] = { value: 0, durability: 1,turnsAlive:0 };
             }
         }
+    }
+
+    
+    // Process scoring and streaks based on total lines cleared in this single move
+    if (linesCleared > 0) {
+        scoring(linesClearedCount); // Pass the count!
+        return true;
+    } else {
+        // Arcade Rule: If you place a tile and clear NOTHING, streak resets!
+        if (gameMode === 'arcade') {
+            streak = 0;
+            console.log("Streak reset to 0 (no lines cleared).");
+            updateHUD();
+        }
+        return false;
     }
 
 }
