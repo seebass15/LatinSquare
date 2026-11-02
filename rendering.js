@@ -200,11 +200,32 @@ function handleCandidateSelect(index) {
 }
 
 // ==================== GAME OVER'S ====================
+// Classic Mode Win Trigger & Modal
+function showClassicVictoryModal(turnsTaken, bestTurns, isNewRecord) {
+    const modal = document.getElementById('classicVictoryModal');
+    if (!modal) return;
+    
+    document.getElementById('classicTurnsVal').textContent = turnsTaken;
+    document.getElementById('classicBestVal').textContent = bestTurns;
+    
+    const badge = document.getElementById('classicNewRecordBadge');
+    if (badge) {
+        badge.style.display = isNewRecord ? 'inline-block' : 'none';
+    }
+    
+    modal.style.display = 'flex';
+}
+
+// Arcade Mode Game Over Trigger & Modal
 function showGameOverModal() {
     const modal = document.getElementById('gameOverModal');
-    if (modal) {
-        modal.style.display = 'flex';
-    }
+    if (!modal) return;
+
+    // Pull current score and persistent high score
+    document.getElementById('arcadeFinalScore').textContent = score;
+    document.getElementById('arcadeHighScore').textContent = highScore;
+
+    modal.style.display = 'flex';
 }
 
 function restartGame() {
