@@ -168,8 +168,8 @@ if(gameMode=='arcade'){
     //game over check
     //console.log(availNum);
     if(moveSucess){
-if(gameMode=='arcade'){
         turnCounter++;
+if(gameMode=='arcade'){
         console.log('turns '+turnCounter);
 
         cellTurnCounter();
