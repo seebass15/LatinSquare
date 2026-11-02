@@ -185,6 +185,7 @@ if(gameMode=='arcade'){
             if(typeof showGameOverModal == 'function'){showGameOverModal()}
         }
 }else if(gameMode='classic'){
+    updateHUD();
 // Classic Mode Win Check: Check if the grid has any empty (0) cells left
             let hasZeros = matrix.some(row => row.some(cell => cell.value === 0));
             if(!hasZeros){
