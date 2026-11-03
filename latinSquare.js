@@ -206,7 +206,8 @@ if(gameMode=='arcade'){
     }
 }
         if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
-            if(typeof showGameOverModal == 'function'){showGameOverModal()}
+            console.log('test');
+            if(typeof showGameOverModal == 'function'){console.log('double');showGameOverModal()}
         }
         return(matrix)
     }  
