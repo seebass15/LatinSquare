@@ -169,6 +169,9 @@ if(gameMode=='arcade'){
     //console.log(availNum);
     if(moveSucess){
         turnCounter++;
+        if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
+            if(typeof showGameOverModal == 'function'){showGameOverModal()}
+        }
 if(gameMode=='arcade'){
         console.log('turns '+turnCounter);
 
@@ -181,23 +184,29 @@ if(gameMode=='arcade'){
             shouldHarden(3); 
         }   
 
-        if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
-            if(typeof showGameOverModal == 'function'){showGameOverModal()}
-        }
-}else if(gameMode='classic'){
+}else if (gameMode === 'classic') {
     updateHUD();
-// Classic Mode Win Check: Check if the grid has any empty (0) cells left
-            let hasZeros = matrix.some(row => row.some(cell => cell.value === 0));
-            if(!hasZeros){
-                console.log('🎉 Classic Mode Solved!');
-                // You can trigger a victory modal or status message here!
-                const statusEl = document.getElementById('statusMessage');
-                if(statusEl) {
-                    statusEl.style.color = "#2ec4b6";
-                    statusEl.textContent = "Puzzle Completed! Perfect Latin Square!";
-                }
-            }
+    
+    // Classic Mode Win Check: Check if the grid has any empty (0) cells left
+    let hasZeros = matrix.some(row => row.some(cell => cell.value === 0));
+    
+    if (!hasZeros) {
+        console.log('🎉 Classic Mode Solved!');
+        
+        let bestTurns = localStorage.getItem('latinSquareMinTurns');
+        let isNewRecord = false;
+
+        if (bestTurns === null || turnCounter < parseInt(bestTurns)) {
+            bestTurns = turnCounter;
+            localStorage.setItem('latinSquareMinTurns', bestTurns);
+            isNewRecord = true;
+        } else {
+            bestTurns = parseInt(bestTurns);
         }
+
+        showClassicVictoryModal(turnCounter, bestTurns, isNewRecord);
+    }
+}
         return(matrix)
     }  
     return null;
