@@ -221,9 +221,27 @@ function showGameOverModal() {
     const modal = document.getElementById('gameOverModal');
     if (!modal) return;
 
-    // Pull current score and persistent high score
-    document.getElementById('arcadeFinalScore').textContent = score;
-    document.getElementById('arcadeHighScore').textContent = highScore;
+    // Grab the elements inside your modal's stats box
+    const stat1Label = document.getElementById('gameOverStat1Label');
+    const stat1Val = document.getElementById('gameOverStat1Val');
+    const stat2Label = document.getElementById('gameOverStat2Label');
+    const stat2Val = document.getElementById('gameOverStat2Val');
+
+    if (gameMode === 'classic') {
+        // Classic Deadlock: Show turns spent before getting stuck
+        stat1Label.textContent = "Turns Played:";
+        stat1Val.textContent = turnCounter;
+        
+        stat2Label.textContent = "Status:";
+        stat2Val.textContent = "Deadlocked / Unfinished";
+    } else {
+        // Arcade Mode: Show score and high score
+        stat1Label.textContent = "Final Score:";
+        stat1Val.textContent = typeof score !== 'undefined' ? score : 0;
+        
+        stat2Label.textContent = "High Score:";
+        stat2Val.textContent = typeof highScore !== 'undefined' ? highScore : 0;
+    }
 
     modal.style.display = 'flex';
 }
