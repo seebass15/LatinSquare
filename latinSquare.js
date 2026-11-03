@@ -169,9 +169,7 @@ if(gameMode=='arcade'){
     //console.log(availNum);
     if(moveSucess){
         turnCounter++;
-        if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
-            if(typeof showGameOverModal == 'function'){showGameOverModal()}
-        }
+
 if(gameMode=='arcade'){
         console.log('turns '+turnCounter);
 
@@ -207,6 +205,9 @@ if(gameMode=='arcade'){
         showClassicVictoryModal(turnCounter, bestTurns, isNewRecord);
     }
 }
+        if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
+            if(typeof showGameOverModal == 'function'){showGameOverModal()}
+        }
         return(matrix)
     }  
     return null;
