@@ -312,12 +312,13 @@ function checkGameOver(legalMovesMap, availNum) {
                 hasEmptyCells = true;
                 let cellKey = r + "-" + c;
                 let validMovesForCell = legalMovesMap.get(cellKey) || [];
-//console.log(legalMovesMap)
-//console.log(availNum)
+console.log(legalMovesMap)
+console.log(availNum)
                 // 2. Check if any active (non-zero) candidate in your tray can fit into this cell
                 for (let num of availNum) {
                     if (num !== 0 && validMovesForCell.includes(num)) {
                         canPlayAnyCandidate = true;
+console.log('cand '+canPlayAnyCandidate);
                         break;
                     }
                 }
