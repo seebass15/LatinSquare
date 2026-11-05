@@ -169,6 +169,7 @@ if(gameMode=='arcade'){
     //console.log(availNum);
     if(moveSucess){
         turnCounter++;
+
 if(gameMode=='arcade'){
         console.log('turns '+turnCounter);
 
@@ -181,22 +182,33 @@ if(gameMode=='arcade'){
             shouldHarden(3); 
         }   
 
-        if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
-            if(typeof showGameOverModal == 'function'){showGameOverModal()}
-        }
-}else if(gameMode='classic'){
+}else if (gameMode === 'classic') {
     updateHUD();
-// Classic Mode Win Check: Check if the grid has any empty (0) cells left
-            let hasZeros = matrix.some(row => row.some(cell => cell.value === 0));
-            if(!hasZeros){
-                console.log('🎉 Classic Mode Solved!');
-                // You can trigger a victory modal or status message here!
-                const statusEl = document.getElementById('statusMessage');
-                if(statusEl) {
-                    statusEl.style.color = "#2ec4b6";
-                    statusEl.textContent = "Puzzle Completed! Perfect Latin Square!";
-                }
-            }
+    
+    // Classic Mode Win Check: Check if the grid has any empty (0) cells left
+    let hasZeros = matrix.some(row => row.some(cell => cell.value === 0));
+    
+    if (!hasZeros) {
+        console.log('🎉 Classic Mode Solved!');
+        
+        let bestTurns = localStorage.getItem('latinSquareMinTurns');
+        let isNewRecord = false;
+
+        if (bestTurns === null || turnCounter < parseInt(bestTurns)) {
+            bestTurns = turnCounter;
+            localStorage.setItem('latinSquareMinTurns', bestTurns);
+            isNewRecord = true;
+        } else {
+            bestTurns = parseInt(bestTurns);
+        }
+
+        showClassicVictoryModal(turnCounter, bestTurns, isNewRecord);
+    }
+}
+console.log('made it to checker')
+        if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
+            console.log('test');
+            if(typeof showGameOverModal == 'function'){console.log('double');showGameOverModal()}
         }
         return(matrix)
     }  
@@ -291,29 +303,43 @@ function clearChecker(coln,rown){
 
 
 function checkGameOver(legalMovesMap, availNum) {
+console.log('PLEASE')
+// Quick safety guard to catch if inputs are dropping out
+if (!legalMovesMap || !(legalMovesMap instanceof Map)) {
+    console.error("checkGameOver error: legalMovesMap is invalid!", legalMovesMap);
+    return false;
+}
+if (!Array.isArray(availNum)) {
+    console.error("checkGameOver error: availNum is not an array!", availNum);
+    return false;
+}
     let hasEmptyCells = false;
     let canPlayAnyCandidate = false;
 
     // 1. Check if there are any empty cells left on the board
-    for (let r = 0; r < matrix[0].length; r++) {
-        for (let c = 0; c < matrix[r].length; c++) {
+    for (r = 0; r < matrix[0].length; r++) {
+        for (c = 0; c < matrix[0].length; c++) {
+console.log('myCell '+matrix[r][c].value+' cell cord '+r+'-'+c);
             if (matrix[r][c].value === 0) {
                 hasEmptyCells = true;
                 let cellKey = r + "-" + c;
                 let validMovesForCell = legalMovesMap.get(cellKey) || [];
-//console.log(legalMovesMap)
-//console.log(availNum)
+console.log(legalMovesMap)
+console.log(availNum)
                 // 2. Check if any active (non-zero) candidate in your tray can fit into this cell
                 for (let num of availNum) {
                     if (num !== 0 && validMovesForCell.includes(num)) {
                         canPlayAnyCandidate = true;
+console.log('cand '+canPlayAnyCandidate);
                         break;
                     }
                 }
             }
+console.log('if false keep going '+canPlayAnyCandidate);
             if (canPlayAnyCandidate) {break;}
         }
-        if (canPlayAnyCandidate || !hasEmptyCells) {break;}
+console.log('are there valued cells '+!hasEmptyCells);
+        if (canPlayAnyCandidate) {break;}
     }
 
     // If there are empty cells left, but ZERO candidates can fit anywhere -> GAME OVER!

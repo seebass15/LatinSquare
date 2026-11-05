@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latin Square Puzzle Game</title>
+
+    <link rel = "StyleSheet" href = "./style.css">
     <style>
         :root {
             --bg-color: #f4f6f9;
@@ -217,16 +219,55 @@
         <div id="statusMessage" class="status-message"></div>
     </div>
 
-    <!-- GAME OVER MODAL -->
-    <div id="gameOverModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-        <div style="background: white; padding: 30px; border-radius: 16px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 300px; width: 90%;">
-            <h2 style="margin-top: 0; color: #ef4444;">Game Over!</h2>
-            <p style="color: #64748b; margin-bottom: 20px;">Your board is soft-locked. You ran out of valid moves!</p>
-            <button onclick="restartGame()" style="background: #4a90e2; color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer;">Play Again</button>
+    <!-- Classic Victory Modal -->
+    <div id="classicVictoryModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>🧩 Puzzle Solved!</h2>
+            <p>You completed the Latin Square perfectly.</p>
+            <div class="stats-box">
+                <p><strong>Turns Taken:</strong> <span id="classicTurnsVal">0</span></p>
+                <p><strong>Best Turns:</strong> <span id="classicBestVal">0</span> <span id="classicNewRecordBadge" class="badge-new" style="display:none;">NEW BEST!</span></p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="location.reload()">🔄 Play Again</button>
+                <a href="index.html" class="btn">🏠 Main Menu</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Arcade Game Over Modal -->
+    <div id="gameOverModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>💀 Game Over</h2>
+            <p>No legal moves left or the board locked up!</p>
+            <div class="stats-box">
+                <p><strong id="gameOverStat1Label">Final Score:</strong> <span id="gameOverStat1Val">0</span></p>
+                <p><strong id="gameOverStat2Label">High Score:</strong> <span id="gameOverStat2Val">0</span></p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="location.reload()">🔄 Try Again</button>
+                <a href="index.html" class="btn">🏠 Main Menu</a>
+            </div>
         </div>
     </div>
 
+    <!-- 📺 New Rewarded Ad Modal -->
+    <div id="adModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>📺 Watch Ad for Reward</h2>
+            <p>Support the game and earn a bonus perk!</p>
+            <div class="stats-box" style="text-align: center; padding: 2rem;">
+                <p style="color: #2ec4b6; font-weight: bold;">[ Simulated Video Ad Playing... ]</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="completeAdReward()">✅ Claim Reward</button>
+                <button class="btn btn-secondary" onclick="closeAdModal()">❌ Close</button>
+            </div>
+        </div>
+    </div>
+    
     <script src="./latinSquare.js"></script>
     <script src="./rendering.js"></script>
+    <script src="./ads.js"></script>
 </body>
 </html>
