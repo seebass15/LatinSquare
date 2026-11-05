@@ -317,8 +317,8 @@ if (!Array.isArray(availNum)) {
     let canPlayAnyCandidate = false;
 
     // 1. Check if there are any empty cells left on the board
-    for (let r = 0; r < matrix[0].length; r++) {
-        for (let c = 0; c < matrix[0].length; c++) {
+    for (r = 0; r < matrix[0].length; r++) {
+        for (c = 0; c < matrix[0].length; c++) {
 console.log('myCell '+matrix[r][c].value+' cell cord '+r+'-'+c);
             if (matrix[r][c].value === 0) {
                 hasEmptyCells = true;
