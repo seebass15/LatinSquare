@@ -205,6 +205,7 @@ if(gameMode=='arcade'){
         showClassicVictoryModal(turnCounter, bestTurns, isNewRecord);
     }
 }
+console.log('made it to checker')
         if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
             console.log('test');
             if(typeof showGameOverModal == 'function'){console.log('double');showGameOverModal()}
@@ -302,6 +303,15 @@ function clearChecker(coln,rown){
 
 
 function checkGameOver(legalMovesMap, availNum) {
+// Quick safety guard to catch if inputs are dropping out
+if (!legalMovesMap || !(legalMovesMap instanceof Map)) {
+    console.error("checkGameOver error: legalMovesMap is invalid!", legalMovesMap);
+    return false;
+}
+if (!Array.isArray(availNum)) {
+    console.error("checkGameOver error: availNum is not an array!", availNum);
+    return false;
+}
     let hasEmptyCells = false;
     let canPlayAnyCandidate = false;
 
