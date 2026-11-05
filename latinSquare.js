@@ -303,6 +303,7 @@ function clearChecker(coln,rown){
 
 
 function checkGameOver(legalMovesMap, availNum) {
+console.log('PLEASE')
 // Quick safety guard to catch if inputs are dropping out
 if (!legalMovesMap || !(legalMovesMap instanceof Map)) {
     console.error("checkGameOver error: legalMovesMap is invalid!", legalMovesMap);
