@@ -338,6 +338,7 @@ console.log('cand '+canPlayAnyCandidate);
 console.log('FALSE AND KEEP GOING '+canPlayAnyCandidate);
             if (canPlayAnyCandidate) {break;}
         }
+console.log('CHECK '+!hasEmptyCells);
         if (canPlayAnyCandidate || !hasEmptyCells) {break;}
     }
 
