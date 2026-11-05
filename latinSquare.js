@@ -335,6 +335,7 @@ console.log('cand '+canPlayAnyCandidate);
                     }
                 }
             }
+console.log('FALSE AND KEEP GOING '+canPlayAnyCandidate);
             if (canPlayAnyCandidate) {break;}
         }
         if (canPlayAnyCandidate || !hasEmptyCells) {break;}
