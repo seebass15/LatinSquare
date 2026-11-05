@@ -335,11 +335,11 @@ console.log('cand '+canPlayAnyCandidate);
                     }
                 }
             }
-console.log('FALSE AND KEEP GOING '+canPlayAnyCandidate);
+console.log('if false keep going '+canPlayAnyCandidate);
             if (canPlayAnyCandidate) {break;}
         }
-console.log('CHECK '+!hasEmptyCells);
-        if (canPlayAnyCandidate || !hasEmptyCells) {break;}
+console.log('are there valued cells '+!hasEmptyCells);
+        if (canPlayAnyCandidate) {break;}
     }
 
     // If there are empty cells left, but ZERO candidates can fit anywhere -> GAME OVER!
