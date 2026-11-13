@@ -26,6 +26,7 @@ function initGame(n) {
 
     renderGrid();
     renderCandidates();
+    matrixTracker();
 }
 
 // Automatically trigger on page load
