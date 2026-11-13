@@ -171,6 +171,7 @@ if(gameMode=='arcade'){
     if(moveSucess){
         turnCounter++;
 
+        matrixTracker();
 if(gameMode=='arcade'){
         console.log('turns '+turnCounter);
 
