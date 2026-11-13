@@ -6,6 +6,7 @@ let turnCounter = 0;
 let score = 0;
 let streak = 0;
 let highScore = localStorage.getItem('latinSquareHighScore') || 0;
+let moveHistory = [];
 
 //check with previous version to see if clear row and celar col were actually working
 //let matrix=createRandomMatrix(n);
@@ -452,4 +453,63 @@ function get_legal_moves(matrix){//might need to move below nRows etc.
         }
     }
     return(legalMovesMap)
+}
+
+
+
+
+
+
+
+
+
+//-----------Undos and power ups---------------
+
+// 1. Call this right after a valid user input is successfully placed
+function matrixTracker() {
+    // Snapshot both the current matrix and the current tray state
+    const matrixSnapshot = matrix.map(row => row.map(cell => ({ ...cell })));
+    const traySnapshot = [...availNum];
+
+    moveHistory.push({
+        matrix: matrixSnapshot,
+        availNum: traySnapshot
+    });
+}
+
+// 2. Call this when the user clicks the Undo button
+function undoMove() {
+    // Arcade mode inventory check (Classic mode can skip this check)
+    if (gameMode === 'arcade') {
+        if (playerState.undos <= 0) {
+            alert("Out of undos! Watch a quick ad to get more.");
+            showAdModal(); // We'll hook this up to ads.js when we return to ads!
+            return;
+        }
+    }
+
+    // Check if there is actually a move history to step back into
+    if (moveHistory.length === 0) {
+        console.log("No moves to undo!");
+        return;
+    }
+
+    // Pop the most recent snapshot off the stack (-1 equivalent in JS stack pop)
+    const previousState = moveHistory.pop();
+
+    // Restore matrix and tray variables
+    matrix = previousState.matrix;
+    availNum = previousState.availNum;
+
+    // Deduct undo charge and update storage if in Arcade mode
+    if (gameMode === 'arcade') {
+        playerState.undos--;
+        savePlayerState(); // Updates localStorage and HUD counters
+    }
+
+    // Re-render the UI elements to reflect the rollback
+    renderBoard();
+    renderTray();
+    
+    console.log("↩️ Undo successful. History stack length:", moveHistory.length);
 }
