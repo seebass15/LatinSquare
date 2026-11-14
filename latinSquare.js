@@ -498,13 +498,17 @@ function undoMove() {
         return;
     }
 
+    
     // Pop the most recent snapshot off the stack (-1 equivalent in JS stack pop)
     const previousState = moveHistory.pop();
 
     // Restore matrix and tray variables
     matrix = previousState.matrix;
-    availNum = previousState.availNum;
-
+    
+    if(gameMode == 'arcade' previousState.availNum){
+        availNum = previousState.availNum;
+    }
+    
     // Deduct undo charge and update storage if in Arcade mode
     if (gameMode === 'arcade') {
         playerState.undos--;
