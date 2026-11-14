@@ -63,8 +63,10 @@ function undoMove() {
     }
 
     // Re-render the UI elements to reflect the rollback
-    renderBoard();
-    renderTray();
+    renderGrid();
+    renderCandidates();
+    //renderBoard();
+    //renderTray();
     
     console.log("↩️ Undo successful. History stack length:", moveHistory.length);
 }
