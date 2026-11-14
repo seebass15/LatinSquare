@@ -473,10 +473,10 @@ function matrixTracker() {
     
     if (gameMode=='arcade'){
         const traySnapshot = [...availNum];
-        moveHistory.push( availNum: traySnapshot);
+        moveHistory.push({availNum: traySnapshot});
     }
     moveHistory.push(
-        matrix: matrixSnapshot
+        {matrix: matrixSnapshot}
         //availNum: traySnapshot
     );
 }
