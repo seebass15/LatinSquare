@@ -8,7 +8,7 @@ let playerState = {
 function savePlayerState() {
     localStorage.setItem('latinSquareUndos', playerState.undos);
     localStorage.setItem('latinSquarePowerups', playerState.powerups);
-    updatePowerupHUD();
+    //updatePowerupHUD();
 }
 
 
