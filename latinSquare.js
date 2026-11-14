@@ -6,6 +6,7 @@ let turnCounter = 0;
 let score = 0;
 let streak = 0;
 let highScore = localStorage.getItem('latinSquareHighScore') || 0;
+let moveHistory = [];
 
 //check with previous version to see if clear row and celar col were actually working
 //let matrix=createRandomMatrix(n);
@@ -170,6 +171,7 @@ if(gameMode=='arcade'){
     if(moveSucess){
         turnCounter++;
 
+        matrixTracker();
 if(gameMode=='arcade'){
         console.log('turns '+turnCounter);
 
@@ -205,10 +207,9 @@ if(gameMode=='arcade'){
         showClassicVictoryModal(turnCounter, bestTurns, isNewRecord);
     }
 }
-console.log('made it to checker')
+//console.log('made it to checker')
         if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
-            console.log('test');
-            if(typeof showGameOverModal == 'function'){console.log('double');showGameOverModal()}
+            if(typeof showGameOverModal == 'function'){showGameOverModal()}
         }
         return(matrix)
     }  
@@ -303,7 +304,6 @@ function clearChecker(coln,rown){
 
 
 function checkGameOver(legalMovesMap, availNum) {
-console.log('PLEASE')
 // Quick safety guard to catch if inputs are dropping out
 if (!legalMovesMap || !(legalMovesMap instanceof Map)) {
     console.error("checkGameOver error: legalMovesMap is invalid!", legalMovesMap);
@@ -319,26 +319,26 @@ if (!Array.isArray(availNum)) {
     // 1. Check if there are any empty cells left on the board
     for (r = 0; r < matrix[0].length; r++) {
         for (c = 0; c < matrix[0].length; c++) {
-console.log('myCell '+matrix[r][c].value+' cell cord '+r+'-'+c);
+//console.log('myCell '+matrix[r][c].value+' cell cord '+r+'-'+c);
             if (matrix[r][c].value === 0) {
                 hasEmptyCells = true;
                 let cellKey = r + "-" + c;
                 let validMovesForCell = legalMovesMap.get(cellKey) || [];
-console.log(legalMovesMap)
-console.log(availNum)
+//console.log(legalMovesMap)
+//console.log(availNum)
                 // 2. Check if any active (non-zero) candidate in your tray can fit into this cell
                 for (let num of availNum) {
                     if (num !== 0 && validMovesForCell.includes(num)) {
                         canPlayAnyCandidate = true;
-console.log('cand '+canPlayAnyCandidate);
+//console.log('cand '+canPlayAnyCandidate);
                         break;
                     }
                 }
             }
-console.log('if false keep going '+canPlayAnyCandidate);
+//console.log('if false keep going '+canPlayAnyCandidate);
             if (canPlayAnyCandidate) {break;}
         }
-console.log('are there valued cells '+!hasEmptyCells);
+//console.log('are there valued cells '+!hasEmptyCells);
         if (canPlayAnyCandidate) {break;}
     }
 

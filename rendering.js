@@ -26,6 +26,8 @@ function initGame(n) {
 
     renderGrid();
     renderCandidates();
+//console.log('tracking history');
+    matrixTracker();
 }
 
 // Automatically trigger on page load

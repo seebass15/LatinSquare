@@ -1,4 +1,17 @@
 //-----------Undos and power ups---------------
+let playerState = {
+    undos: parseInt(localStorage.getItem('latinSquareUndos')) || 3,
+    powerups: parseInt(localStorage.getItem('latinSquarePowerups')) || 1
+};
+
+// Save inventory changes to localStorage and update HUD if present
+function savePlayerState() {
+    localStorage.setItem('latinSquareUndos', playerState.undos);
+    localStorage.setItem('latinSquarePowerups', playerState.powerups);
+    //updatePowerupHUD();
+}
+
+
 
 // 1. Call this right after a valid user input is successfully placed
 function matrixTracker() {
@@ -34,12 +47,15 @@ function undoMove() {
 
     
     // Pop the most recent snapshot off the stack (-1 equivalent in JS stack pop)
-    const previousState = moveHistory.pop();
-
+    const previousState = moveHistory.at(-2);
+    moveHistory.pop();
+    
+//console.log('MOVE HISTORY ' + moveHistory[0].matrix[0][0].value);
+//console.log('Global Matrix before undo '+ matrix[0][0].value);
     // Restore matrix and tray variables
     matrix = previousState.matrix;
-    
-    if(gameMode == 'arcade' previousState.availNum){
+
+    if(gameMode == 'arcade' && previousState.availNum){
         availNum = previousState.availNum;
     }
     
@@ -50,8 +66,10 @@ function undoMove() {
     }
 
     // Re-render the UI elements to reflect the rollback
-    renderBoard();
-    renderTray();
+    renderGrid();
+    renderCandidates();
+    //renderBoard();
+    //renderTray();
     
     console.log("↩️ Undo successful. History stack length:", moveHistory.length);
 }
