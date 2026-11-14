@@ -48,7 +48,7 @@ function undoMove() {
     
     // Pop the most recent snapshot off the stack (-1 equivalent in JS stack pop)
     const previousState = moveHistory.pop();
-
+console.log('HELLLO'+ matrix)
     // Restore matrix and tray variables
     matrix = previousState.matrix;
     
