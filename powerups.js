@@ -47,11 +47,12 @@ function undoMove() {
 
     
     // Pop the most recent snapshot off the stack (-1 equivalent in JS stack pop)
-    const previousState = moveHistory.pop();
-console.log('HELLLO'+ matrix[0][0].value)
+    const previousState = moveHistory.at(-2);
+console.log('MOVE HISTORY ' + moveHistory[0].matrix[0][0].value);
+console.log('Global Matrix before undo '+ matrix[0][0].value);
     // Restore matrix and tray variables
     matrix = previousState.matrix;
-    
+
     if(gameMode == 'arcade' && previousState.availNum){
         availNum = previousState.availNum;
     }
