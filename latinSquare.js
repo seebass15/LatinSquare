@@ -470,15 +470,15 @@ function get_legal_moves(matrix){//might need to move below nRows etc.
 function matrixTracker() {
     // Snapshot both the current matrix and the current tray state
     const matrixSnapshot = matrix.map(row => row.map(cell => ({ ...cell })));
+
+    let snapshot = {matrix: matrixSnapshot};
     
-    if (gameMode=='arcade'){
+    if (gameMode == 'arcade'){
         const traySnapshot = [...availNum];
-        moveHistory.push({availNum: traySnapshot});
+        snapshot.availNum = traySnapshot;
     }
-    moveHistory.push(
-        {matrix: matrixSnapshot}
-        //availNum: traySnapshot
-    );
+
+    moveHistory.push(snapshot);
 }
 
 // 2. Call this when the user clicks the Undo button
