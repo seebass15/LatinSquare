@@ -26,7 +26,7 @@ function initGame(n) {
 
     renderGrid();
     renderCandidates();
-console.log('tracking history');
+//console.log('tracking history');
     matrixTracker();
 }
 
