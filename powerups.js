@@ -73,3 +73,37 @@ function undoMove() {
     
     console.log("↩️ Undo successful. History stack length:", moveHistory.length);
 }
+
+
+function updatePowerupHUD() {
+    const undoBtn = document.getElementById('undoBtn');
+    const undoEl = document.getElementById('undoCountVal');
+    const powerEl = document.getElementById('powerupCountVal');
+
+    if (powerEl) {
+        powerEl.textContent = playerState.powerups;
+    }
+
+    if (gameMode === 'arcade') {
+        if (undoEl) {
+            undoEl.style.display = '';
+            undoEl.textContent = playerState.undos;
+        }
+        if (undoBtn) {
+            const outOfUndos = playerState.undos <= 0;
+            undoBtn.classList.toggle('is-empty', outOfUndos);
+            undoBtn.setAttribute('aria-disabled', outOfUndos ? 'true' : 'false');
+        }
+    } else {
+        // Classic mode: unlimited undos, no count shown
+        if (undoEl) {
+            undoEl.style.display = 'none';
+            undoEl.textContent = '';
+        }
+        if (undoBtn) {
+            const noHistory = !Array.isArray(moveHistory) || moveHistory.length === 0;
+            undoBtn.classList.toggle('is-empty', noHistory);
+            undoBtn.setAttribute('aria-disabled', noHistory ? 'true' : 'false');
+        }
+    }
+}
