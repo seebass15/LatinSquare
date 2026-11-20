@@ -148,3 +148,72 @@ body {
     justify-content: center;
     margin-top: 1.5rem;
 }
+
+
+
+
+//-----UI BUTTON-----
+.undo-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #1f2937;
+    color: #f9fafb;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease, background-color 0.2s ease;
+}
+
+.undo-btn:hover:not(:disabled) {
+    background: #2c3a4f;
+    transform: translateY(-1px);
+}
+
+.undo-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.undo-icon {
+    font-size: 1.45rem;
+    line-height: 1;
+}
+
+.undo-badge {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #2ec4b6;
+    color: #062825;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Grayed-out state when no undos remain in Arcade mode */
+.undo-btn:disabled,
+.undo-btn.is-empty {
+    opacity: 0.45;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+    pointer-events: auto; /* Keep clickable if you want out-of-undos to trigger the ad modal */
+}
+.tray-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.undo-btn {
+    flex-shrink: 0;
+}
