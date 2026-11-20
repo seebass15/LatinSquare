@@ -32,7 +32,7 @@ function matrixTracker() {
 function undoMove() {
     // Arcade mode inventory check (Classic mode can skip this check)
     if (gameMode === 'arcade') {
-        if (playerState.undos <= 0) {
+        if (playerState.undos <= 1) {
             alert("Out of undos! Watch a quick ad to get more.");
             showAdModal(); // We'll hook this up to ads.js when we return to ads!
             return;
