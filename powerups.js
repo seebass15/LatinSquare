@@ -78,32 +78,28 @@ function undoMove() {
 function updatePowerupHUD() {
     const undoBtn = document.getElementById('undoBtn');
     const undoEl = document.getElementById('undoCountVal');
-    const powerEl = document.getElementById('powerupCountVal');
+    const isArcade = typeof gameMode !== 'undefined' && gameMode === 'arcade';
+    const hasHistory = Array.isArray(moveHistory) && moveHistory.length > 0;
+    const remainingUndos = typeof playerState !== 'undefined' && typeof playerState.undo === 'number'
+        ? playerState.undo
+        : 0;
 
-    if (powerEl) {
-        powerEl.textContent = playerState.powerups;
-    }
-
-    if (gameMode === 'arcade') {
+    if (isArcade) {
         if (undoEl) {
             undoEl.style.display = '';
-            undoEl.textContent = playerState.undos;
+            undoEl.textContent = remainingUndos;
         }
         if (undoBtn) {
-            const outOfUndos = playerState.undos <= 0;
-            undoBtn.classList.toggle('is-empty', outOfUndos);
-            undoBtn.setAttribute('aria-disabled', outOfUndos ? 'true' : 'false');
+            undoBtn.classList.toggle('empty-slot', remainingUndos <= 0 || !hasHistory);
         }
     } else {
-        // Classic mode: unlimited undos, no count shown
+        // Classic mode: unlimited undos, no numeric count shown
         if (undoEl) {
             undoEl.style.display = 'none';
             undoEl.textContent = '';
         }
         if (undoBtn) {
-            const noHistory = !Array.isArray(moveHistory) || moveHistory.length === 0;
-            undoBtn.classList.toggle('is-empty', noHistory);
-            undoBtn.setAttribute('aria-disabled', noHistory ? 'true' : 'false');
+            undoBtn.classList.toggle('empty-slot', !hasHistory);
         }
     }
 }
