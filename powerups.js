@@ -32,7 +32,7 @@ function matrixTracker() {
 function undoMove() {
     // Arcade mode inventory check (Classic mode can skip this check)
     if (gameMode === 'arcade') {
-        if (playerState.undos <= 1) {
+        if (playerState.undos <= 0) {
             alert("Out of undos! Watch a quick ad to get more.");
             showAdModal(); // We'll hook this up to ads.js when we return to ads!
             return;
@@ -40,7 +40,7 @@ function undoMove() {
     }
 
     // Check if there is actually a move history to step back into
-    if (moveHistory.length === 0) {
+    if (moveHistory.length == 1) {
         console.log("No moves to undo!");
         return;
     }
