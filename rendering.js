@@ -113,7 +113,7 @@ function createUndoTrayButton() {
     return btn;
 }
 
-function renderCandidate() {
+function renderCandidates() {
     const tray = document.getElementById('candidatesTray');
     if (!tray) return;
 
