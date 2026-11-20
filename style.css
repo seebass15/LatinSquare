@@ -157,7 +157,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .undo-btn {
@@ -186,7 +188,7 @@ body {
 }
 
 .undo-icon {
-    font-size: 1.4rem;
+    font-size: 26px;
     line-height: 1;
 }
 
@@ -194,21 +196,22 @@ body {
     position: absolute;
     right: -4px;
     bottom: -4px;
-    min-width: 20px;
-    height: 20px;
+    min-width: 22px;
+    height: 22px;
     padding: 0 5px;
     border-radius: 999px;
-    background: #2ec4b6;
-    color: #062825;
-    font-size: 0.72rem;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-size: 12px;
     font-weight: 700;
-    line-height: 20px;
+    line-height: 22px;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.undo-btn.is-empty {
-    opacity: 0.45;
-    filter: grayscale(100%);
-    cursor: not-allowed;
+/* Mutes the badge when the button gets .empty-slot */
+.undo-btn.empty-slot .undo-badge {
+    background-color: #cbd5e1;
+    color: #ffffff;
+    box-shadow: none;
 }
