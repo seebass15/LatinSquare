@@ -91,26 +91,40 @@ function renderGrid() {
     }
 }
 
-function renderCandidates() {
-    const trayContainer = document.getElementById('candidatesTray');
-    trayContainer.innerHTML = '';
+function createUndoTrayButton() {
+    const btn = document.createElement('button');
+    btn.id = 'undoBtn';
+    btn.type = 'button';
+    btn.className = 'candidate-btn undo-btn';
+    btn.setAttribute('aria-label', 'Undo move');
+    btn.addEventListener('click', undoMove);
 
-    availNum.forEach((num, index) => {
-        const btn = document.createElement('button');
-        
-        // Added `num === 0` here so it recognizes used slots!
-        if (num === null || num === undefined || num === 0) {
-            btn.className = 'candidate-btn empty-slot';
-            btn.textContent = '-';
-            btn.disabled = true;
-        } else {
-            btn.className = `candidate-btn ${selectedCandidateIndex === index ? 'selected' : ''}`;
-            btn.textContent = num;
-            btn.addEventListener('click', () => handleCandidateSelect(index));
-        }
+    const icon = document.createElement('span');
+    icon.className = 'undo-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.innerHTML = '&#8630;';
 
-        trayContainer.appendChild(btn);
-    });
+    const badge = document.createElement('span');
+    badge.id = 'undoCountVal';
+    badge.className = 'undo-badge';
+
+    btn.appendChild(icon);
+    btn.appendChild(badge);
+    return btn;
+}
+
+function renderCandidate() {
+    const tray = document.getElementById('candidatesTray');
+    if (!tray) return;
+
+    tray.innerHTML = '';
+    tray.appendChild(createUndoTrayButton());
+
+    // ... your existing candidate number button creation logic here ...
+
+    if (typeof updatePowerupHUD === 'function') {
+        updatePowerupHUD();
+    }
 }
 
 // ==================== EVENT HANDLERS ====================
