@@ -81,7 +81,7 @@ function updatePowerupHUD() {
     const isArcade = typeof gameMode !== 'undefined' && gameMode === 'arcade';
     const hasHistory = Array.isArray(moveHistory) && moveHistory.length > 0;
     const remainingUndos = typeof playerState !== 'undefined' && typeof playerState.undo === 'number'
-        ? playerState.undo
+        ? playerState.undos
         : 0;
 
     if (isArcade) {
