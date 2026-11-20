@@ -214,7 +214,13 @@
         <div id="gridBoard" class="grid-board"></div>
 
         <div class="tray-label">Available Numbers</div>
-        <div id="candidatesTray" class="candidates-tray"></div>
+        <div class="tray-row">
+            <button id="undoBtn" class="undo-btn" type="button" onclick="undoMove()" aria-label="Undo move">
+                <span class="undo-icon" aria-hidden="true">&#8630;</span>
+                <span id="undoCountVal" class="undo-badge">3</span>
+            </button>
+            <div id="candidatesTray" class="candidates-tray"></div>
+        </div>
 
         <div id="statusMessage" class="status-message"></div>
     </div>
