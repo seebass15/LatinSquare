@@ -80,12 +80,12 @@ function updatePowerupHUD() {
     const undoEl = document.getElementById('undoCountVal');
     const isArcade = typeof gameMode !== 'undefined' && gameMode === 'arcade';
     const hasHistory = Array.isArray(moveHistory) && moveHistory.length > 0;
-console.log(hasHistory);
+//console.log(hasHistory);
     const remainingUndos = playerState.undos;
-console.log(remainingUndos);
+//console.log(remainingUndos);
 
     if (isArcade) {
-console.log('is arcade');
+//console.log('is arcade');
         if (undoEl) {
             undoEl.style.display = '';
             undoEl.textContent = remainingUndos;
