@@ -1,4 +1,17 @@
 //-----------Undos and power ups---------------
+let playerState = {
+    undos: parseInt(localStorage.getItem('latinSquareUndos')) || 3,
+    powerups: parseInt(localStorage.getItem('latinSquarePowerups')) || 1
+};
+
+// Save inventory changes to localStorage and update HUD if present
+function savePlayerState() {
+    localStorage.setItem('latinSquareUndos', playerState.undos);
+    localStorage.setItem('latinSquarePowerups', playerState.powerups);
+    updatePowerupHUD();
+}
+
+
 
 // 1. Call this right after a valid user input is successfully placed
 function matrixTracker() {
@@ -27,19 +40,22 @@ function undoMove() {
     }
 
     // Check if there is actually a move history to step back into
-    if (moveHistory.length === 0) {
+    if (moveHistory.length == 1) {
         console.log("No moves to undo!");
         return;
     }
 
     
     // Pop the most recent snapshot off the stack (-1 equivalent in JS stack pop)
-    const previousState = moveHistory.pop();
-
+    const previousState = moveHistory.at(-2);
+    moveHistory.pop();
+    
+//console.log('MOVE HISTORY ' + moveHistory[0].matrix[0][0].value);
+//console.log('Global Matrix before undo '+ matrix[0][0].value);
     // Restore matrix and tray variables
     matrix = previousState.matrix;
-    
-    if(gameMode == 'arcade' previousState.availNum){
+
+    if(gameMode == 'arcade' && previousState.availNum){
         availNum = previousState.availNum;
     }
     
@@ -50,8 +66,41 @@ function undoMove() {
     }
 
     // Re-render the UI elements to reflect the rollback
-    renderBoard();
-    renderTray();
+    renderGrid();
+    renderCandidates();
+    //renderBoard();
+    //renderTray();
     
     console.log("↩️ Undo successful. History stack length:", moveHistory.length);
+}
+
+
+function updatePowerupHUD() {
+    const undoBtn = document.getElementById('undoBtn');
+    const undoEl = document.getElementById('undoCountVal');
+    const isArcade = typeof gameMode !== 'undefined' && gameMode === 'arcade';
+    const hasHistory = Array.isArray(moveHistory) && moveHistory.length > 0;
+console.log(hasHistory);
+    const remainingUndos = playerState.undos;
+console.log(remainingUndos);
+
+    if (isArcade) {
+console.log('is arcade');
+        if (undoEl) {
+            undoEl.style.display = '';
+            undoEl.textContent = remainingUndos;
+        }
+        if (undoBtn) {
+            undoBtn.classList.toggle('empty-slot', remainingUndos <= 0 || !hasHistory);
+        }
+    } else {
+        // Classic mode: unlimited undos, no numeric count shown
+        if (undoEl) {
+            undoEl.style.display = 'none';
+            undoEl.textContent = '';
+        }
+        if (undoBtn) {
+            undoBtn.classList.toggle('empty-slot', !hasHistory);
+        }
+    }
 }

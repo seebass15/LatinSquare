@@ -148,3 +148,70 @@ body {
     justify-content: center;
     margin-top: 1.5rem;
 }
+
+
+
+
+//-----UI BUTTON-----
+/*.tray-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}*/
+
+.undo-btn {
+    position: relative;
+    flex-shrink: 0;
+    /*display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: #1f2937;
+    color: #f9fafb;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease, background-color 0.2s ease;*/
+}
+
+/*.undo-btn:hover:not(.is-empty) {
+    background: #2c3a4f;
+    transform: translateY(-1px);
+}
+
+.undo-btn:active:not(.is-empty) {
+    transform: translateY(0);
+}*/
+
+.undo-icon {
+    font-size: 26px;
+    line-height: 1;
+}
+
+.undo-badge {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 22px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* Mutes the badge when the button gets .empty-slot */
+.undo-btn.empty-slot .undo-badge {
+    background-color: #cbd5e1;
+    color: #ffffff;
+    box-shadow: none;
+}

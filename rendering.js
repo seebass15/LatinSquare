@@ -26,6 +26,8 @@ function initGame(n) {
 
     renderGrid();
     renderCandidates();
+//console.log('tracking history');
+    matrixTracker();
 }
 
 // Automatically trigger on page load
@@ -89,11 +91,36 @@ function renderGrid() {
     }
 }
 
-function renderCandidates() {
-    const trayContainer = document.getElementById('candidatesTray');
-    trayContainer.innerHTML = '';
+function createUndoTrayButton() {
+    const btn = document.createElement('button');
+    btn.id = 'undoBtn';
+    btn.type = 'button';
+    btn.className = 'candidate-btn undo-btn';
+    btn.setAttribute('aria-label', 'Undo move');
+    btn.addEventListener('click', undoMove);
 
-    availNum.forEach((num, index) => {
+    const icon = document.createElement('span');
+    icon.className = 'undo-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.innerHTML = '&#8630;';
+
+    const badge = document.createElement('span');
+    badge.id = 'undoCountVal';
+    badge.className = 'undo-badge';
+
+    btn.appendChild(icon);
+    btn.appendChild(badge);
+    return btn;
+}
+
+function renderCandidates() {
+    const tray = document.getElementById('candidatesTray');
+    if (!tray) return;
+
+    tray.innerHTML = '';
+    tray.appendChild(createUndoTrayButton());
+
+     availNum.forEach((num, index) => {
         const btn = document.createElement('button');
         
         // Added `num === 0` here so it recognizes used slots!
@@ -106,9 +133,12 @@ function renderCandidates() {
             btn.textContent = num;
             btn.addEventListener('click', () => handleCandidateSelect(index));
         }
-
-        trayContainer.appendChild(btn);
-    });
+         tray.appendChild(btn);
+     });
+                      
+    if (typeof updatePowerupHUD === 'function') {
+        updatePowerupHUD();
+    }
 }
 
 // ==================== EVENT HANDLERS ====================
