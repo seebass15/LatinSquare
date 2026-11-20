@@ -120,8 +120,22 @@ function renderCandidates() {
     tray.innerHTML = '';
     tray.appendChild(createUndoTrayButton());
 
-    // ... your existing candidate number button creation logic here ...
-
+     availNum.forEach((num, index) => {
+        const btn = document.createElement('button');
+        
+        // Added `num === 0` here so it recognizes used slots!
+        if (num === null || num === undefined || num === 0) {
+            btn.className = 'candidate-btn empty-slot';
+            btn.textContent = '-';
+            btn.disabled = true;
+        } else {
+            btn.className = `candidate-btn ${selectedCandidateIndex === index ? 'selected' : ''}`;
+            btn.textContent = num;
+            btn.addEventListener('click', () => handleCandidateSelect(index));
+        }
+         tray.appendChild(btn);
+     });
+                      
     if (typeof updatePowerupHUD === 'function') {
         updatePowerupHUD();
     }
