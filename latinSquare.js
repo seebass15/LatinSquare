@@ -207,10 +207,9 @@ if(gameMode=='arcade'){
         showClassicVictoryModal(turnCounter, bestTurns, isNewRecord);
     }
 }
-console.log('made it to checker')
+//console.log('made it to checker')
         if(checkGameOver(get_legal_moves(matrix),availNum)){//check if nums or num
-            console.log('test');
-            if(typeof showGameOverModal == 'function'){console.log('double');showGameOverModal()}
+            if(typeof showGameOverModal == 'function'){showGameOverModal()}
         }
         return(matrix)
     }  
@@ -305,7 +304,6 @@ function clearChecker(coln,rown){
 
 
 function checkGameOver(legalMovesMap, availNum) {
-console.log('PLEASE')
 // Quick safety guard to catch if inputs are dropping out
 if (!legalMovesMap || !(legalMovesMap instanceof Map)) {
     console.error("checkGameOver error: legalMovesMap is invalid!", legalMovesMap);
@@ -321,26 +319,26 @@ if (!Array.isArray(availNum)) {
     // 1. Check if there are any empty cells left on the board
     for (r = 0; r < matrix[0].length; r++) {
         for (c = 0; c < matrix[0].length; c++) {
-console.log('myCell '+matrix[r][c].value+' cell cord '+r+'-'+c);
+//console.log('myCell '+matrix[r][c].value+' cell cord '+r+'-'+c);
             if (matrix[r][c].value === 0) {
                 hasEmptyCells = true;
                 let cellKey = r + "-" + c;
                 let validMovesForCell = legalMovesMap.get(cellKey) || [];
-console.log(legalMovesMap)
-console.log(availNum)
+//console.log(legalMovesMap)
+//console.log(availNum)
                 // 2. Check if any active (non-zero) candidate in your tray can fit into this cell
                 for (let num of availNum) {
                     if (num !== 0 && validMovesForCell.includes(num)) {
                         canPlayAnyCandidate = true;
-console.log('cand '+canPlayAnyCandidate);
+//console.log('cand '+canPlayAnyCandidate);
                         break;
                     }
                 }
             }
-console.log('if false keep going '+canPlayAnyCandidate);
+//console.log('if false keep going '+canPlayAnyCandidate);
             if (canPlayAnyCandidate) {break;}
         }
-console.log('are there valued cells '+!hasEmptyCells);
+//console.log('are there valued cells '+!hasEmptyCells);
         if (canPlayAnyCandidate) {break;}
     }
 
@@ -454,63 +452,4 @@ function get_legal_moves(matrix){//might need to move below nRows etc.
         }
     }
     return(legalMovesMap)
-}
-
-
-
-
-
-
-
-
-
-//-----------Undos and power ups---------------
-
-// 1. Call this right after a valid user input is successfully placed
-function matrixTracker() {
-    // Snapshot both the current matrix and the current tray state
-    const matrixSnapshot = matrix.map(row => row.map(cell => ({ ...cell })));
-    const traySnapshot = [...availNum];
-
-    moveHistory.push({
-        matrix: matrixSnapshot,
-        availNum: traySnapshot
-    });
-}
-
-// 2. Call this when the user clicks the Undo button
-function undoMove() {
-    // Arcade mode inventory check (Classic mode can skip this check)
-    if (gameMode === 'arcade') {
-        if (playerState.undos <= 0) {
-            alert("Out of undos! Watch a quick ad to get more.");
-            showAdModal(); // We'll hook this up to ads.js when we return to ads!
-            return;
-        }
-    }
-
-    // Check if there is actually a move history to step back into
-    if (moveHistory.length === 0) {
-        console.log("No moves to undo!");
-        return;
-    }
-
-    // Pop the most recent snapshot off the stack (-1 equivalent in JS stack pop)
-    const previousState = moveHistory.pop();
-
-    // Restore matrix and tray variables
-    matrix = previousState.matrix;
-    availNum = previousState.availNum;
-
-    // Deduct undo charge and update storage if in Arcade mode
-    if (gameMode === 'arcade') {
-        playerState.undos--;
-        savePlayerState(); // Updates localStorage and HUD counters
-    }
-
-    // Re-render the UI elements to reflect the rollback
-    renderBoard();
-    renderTray();
-    
-    console.log("↩️ Undo successful. History stack length:", moveHistory.length);
 }
